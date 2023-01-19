@@ -2,8 +2,10 @@ package me.washcar.wcnc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class WcncApplication {
 
 	public static void main(String[] args) {
