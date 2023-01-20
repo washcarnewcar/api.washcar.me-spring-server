@@ -1,9 +1,6 @@
 package me.washcar.wcnc.store.menu;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import me.washcar.wcnc.model.BaseEntity;
 import me.washcar.wcnc.reservation.Reservation;
@@ -25,7 +22,7 @@ public class StoreMenu extends BaseEntity {
     private String description;
 
     private String image;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Store store;
 
     @OneToMany(mappedBy = "storeMenu")

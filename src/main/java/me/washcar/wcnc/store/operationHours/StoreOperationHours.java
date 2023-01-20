@@ -2,7 +2,7 @@ package me.washcar.wcnc.store.operationHours;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import me.washcar.wcnc.model.BaseEntity;
 import me.washcar.wcnc.store.Store;
@@ -54,7 +54,8 @@ public class StoreOperationHours extends BaseEntity {
 
     @Column(nullable = false)
     private LocalTime saturdayEndTime;
-    @ManyToOne
+
+    @OneToOne
     private Store store;
 
 }

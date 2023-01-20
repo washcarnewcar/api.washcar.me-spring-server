@@ -1,6 +1,7 @@
 package me.washcar.wcnc.car;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 public class Model extends NamedEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Brand brand;
 
     @OneToMany(mappedBy = "model")

@@ -42,20 +42,20 @@ public class Store extends NamedEntity {
 
     private String previewImage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member owner;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "store")
+    private StoreOperationHours storeOperationHours;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
+    private List<StoreOperationException> storeOperationExceptions = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
     private List<StoreImage> storeImages = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
     private List<StoreMenu> storeMenus = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
-    private List<StoreOperationHours> storeOperationHours = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
-    private List<StoreOperationException> storeOperationExceptions = new ArrayList<>();
 
     @OneToMany(mappedBy = "store")
     private List<Reservation> reservations = new ArrayList<>();

@@ -2,6 +2,7 @@ package me.washcar.wcnc.reservation;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import me.washcar.wcnc.car.Model;
@@ -31,16 +32,16 @@ public class Reservation extends BaseEntity {
 
     private String carNumber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Model model;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Store store;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private StoreMenu storeMenu;
 
 }
