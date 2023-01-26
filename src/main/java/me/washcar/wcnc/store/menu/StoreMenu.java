@@ -2,7 +2,7 @@ package me.washcar.wcnc.store.menu;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import me.washcar.wcnc.model.BaseEntity;
+import me.washcar.wcnc.model.UuidEntity;
 import me.washcar.wcnc.reservation.Reservation;
 import me.washcar.wcnc.store.Store;
 
@@ -11,7 +11,8 @@ import java.util.Collection;
 
 @Entity
 @Getter
-public class StoreMenu extends BaseEntity {
+@Table(indexes = @Index(name = "uuid_store_menu_index", columnList = "uuid"))
+public class StoreMenu extends UuidEntity {
 
     @Column(nullable = false)
     private int price;

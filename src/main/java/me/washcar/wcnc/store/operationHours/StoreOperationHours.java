@@ -9,8 +9,7 @@ import me.washcar.wcnc.store.Store;
 
 import java.time.LocalTime;
 
-@Entity
-@Getter
+@Entity @Getter
 public class StoreOperationHours extends BaseEntity {
 
     @Column(nullable = false)

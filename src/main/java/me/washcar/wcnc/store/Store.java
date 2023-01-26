@@ -3,7 +3,7 @@ package me.washcar.wcnc.store;
 import jakarta.persistence.*;
 import lombok.Getter;
 import me.washcar.wcnc.member.Member;
-import me.washcar.wcnc.model.NamedEntity;
+import me.washcar.wcnc.model.BaseEntity;
 import me.washcar.wcnc.reservation.Reservation;
 import me.washcar.wcnc.store.image.StoreImage;
 import me.washcar.wcnc.store.menu.StoreMenu;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
-public class Store extends NamedEntity {
+public class Store extends BaseEntity {
 
     @Column(nullable = false)
     private StoreStatus status;
@@ -29,7 +29,8 @@ public class Store extends NamedEntity {
     @Column(nullable = false)
     private Double longitude;
 
-    @Column(nullable = false)
+    private String name;
+
     private String address;
 
     private String addressDetail;

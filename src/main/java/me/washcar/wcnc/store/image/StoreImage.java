@@ -1,16 +1,14 @@
 package me.washcar.wcnc.store.image;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
-import me.washcar.wcnc.model.BaseEntity;
+import me.washcar.wcnc.model.UuidEntity;
 import me.washcar.wcnc.store.Store;
 
 @Entity
 @Getter
-public class StoreImage extends BaseEntity {
+@Table(indexes = @Index(name = "uuid_store_image_index", columnList = "uuid"))
+public class StoreImage extends UuidEntity {
 
     @Column(nullable = false)
     private String imageUrl;

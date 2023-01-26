@@ -1,8 +1,10 @@
 package me.washcar.wcnc.member;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
-import me.washcar.wcnc.model.NamedEntity;
+import lombok.NoArgsConstructor;
+import me.washcar.wcnc.model.UuidEntity;
 import me.washcar.wcnc.reservation.Reservation;
 import me.washcar.wcnc.store.Store;
 
@@ -11,18 +13,24 @@ import java.util.List;
 
 @Entity
 @Getter
-public class Member extends NamedEntity {
+@NoArgsConstructor
+@Table(indexes = @Index(name = "uuid_member_index", columnList = "uuid"))
+public class Member extends UuidEntity {
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberStatus memberStatus;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberRole memberRole;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberAuthenticationType memberAuthenticationType;
 
-    @Column(nullable = false)
+    private String name;
+
     private String password;
 
     private String telephone;
@@ -32,5 +40,17 @@ public class Member extends NamedEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Reservation> reservations = new ArrayList<>();
+
+    @Builder
+    public Member(String name, MemberStatus memberStatus, MemberRole memberRole, MemberAuthenticationType memberAuthenticationType, String password, String telephone, List<Store> stores, List<Reservation> reservations) {
+        this.name = name;
+        this.memberStatus = memberStatus;
+        this.memberRole = memberRole;
+        this.memberAuthenticationType = memberAuthenticationType;
+        this.password = password;
+        this.telephone = telephone;
+        this.stores = stores;
+        this.reservations = reservations;
+    }
 
 }
