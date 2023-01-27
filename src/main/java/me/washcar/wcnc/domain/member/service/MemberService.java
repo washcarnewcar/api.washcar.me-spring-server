@@ -69,7 +69,6 @@ public class MemberService {
     }
 
     public void changeMemberStatusByUuid(String uuid, MemberStatus memberStatus) {
-        //TODO 미구현: 해당 유저 패치
         Member member = memberRepository.findByUuid(uuid)
                 .orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
         member.changeStatus(memberStatus);
