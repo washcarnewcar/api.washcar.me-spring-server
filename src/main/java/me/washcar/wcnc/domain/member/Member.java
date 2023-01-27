@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import me.washcar.wcnc.global.entity.UuidEntity;
 import me.washcar.wcnc.domain.reservation.Reservation;
 import me.washcar.wcnc.domain.store.Store;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE member SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 @Table(indexes = @Index(name = "uuid_member_index", columnList = "uuid"))
 public class Member extends UuidEntity {
 
@@ -36,7 +40,10 @@ public class Member extends UuidEntity {
 
     private String telephone;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    @Column(nullable = false)
+    private Boolean deleted = Boolean.FALSE;
+
+    @OneToMany(mappedBy = "owner")
     private List<Store> stores = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")

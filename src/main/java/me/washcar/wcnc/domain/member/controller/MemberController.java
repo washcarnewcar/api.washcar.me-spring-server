@@ -55,10 +55,11 @@ public class MemberController {
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<MemberDto> deleteMemberByUuid(@PathVariable @Pattern(regexp = REGEXP_UUID_V4) String uuid) {
+    public ResponseEntity<Void> deleteMemberByUuid(@PathVariable @Pattern(regexp = REGEXP_UUID_V4) String uuid) {
+        memberService.deleteMemberByUuid(uuid);
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(memberService.deleteMemberByUuid(uuid));
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @PatchMapping("/{uuid}")

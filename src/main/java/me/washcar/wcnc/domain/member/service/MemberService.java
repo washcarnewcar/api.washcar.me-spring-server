@@ -62,11 +62,10 @@ public class MemberService {
         return new MemberDto();
     }
 
-    public MemberDto deleteMemberByUuid(String uuid) {
-        //TODO 미구현: 해당 유저 삭제
+    public void deleteMemberByUuid(String uuid) {
         Member member = memberRepository.findByUuid(uuid)
                 .orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
-        return new MemberDto();
+        memberRepository.delete(member);
     }
 
     public void changeMemberStatusByUuid(String uuid, MemberStatus memberStatus) {
