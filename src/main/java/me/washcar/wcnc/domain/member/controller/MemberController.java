@@ -2,6 +2,8 @@ package me.washcar.wcnc.domain.member.controller;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import me.washcar.wcnc.domain.member.MemberStatus;
+import me.washcar.wcnc.domain.member.dto.request.MemberPatchRequestDto;
 import me.washcar.wcnc.domain.member.service.MemberService;
 import me.washcar.wcnc.domain.member.dto.response.MemberDto;
 import org.springframework.data.domain.Page;
@@ -60,10 +62,14 @@ public class MemberController {
     }
 
     @PatchMapping("/{uuid}")
-    public ResponseEntity<MemberDto> patchMemberByUuid(@PathVariable @Pattern(regexp = REGEXP_UUID_V4) String uuid) {
+    public ResponseEntity<MemberDto> patchMemberByUuid(
+            @PathVariable @Pattern(regexp = REGEXP_UUID_V4) String uuid,
+            @RequestBody MemberPatchRequestDto memberPatchRequestDto) {
+        MemberStatus memberStatus = memberPatchRequestDto.getMemberStatus();
+        memberService.changeMemberStatusByUuid(uuid, memberStatus);
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(memberService.patchMemberByUuid(uuid));
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @GetMapping("/me")

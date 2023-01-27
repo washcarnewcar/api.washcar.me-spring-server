@@ -54,4 +54,7 @@ public class Member extends UuidEntity {
         this.reservations = reservations;
     }
 
+    public void changeStatus(MemberStatus status) {
+        this.memberStatus = status;
+    }
 }

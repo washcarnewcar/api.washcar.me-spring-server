@@ -69,15 +69,17 @@ public class MemberService {
         return new MemberDto();
     }
 
-    public MemberDto patchMemberByUuid(String uuid) {
+    public void changeMemberStatusByUuid(String uuid, MemberStatus memberStatus) {
         //TODO 미구현: 해당 유저 패치
         Member member = memberRepository.findByUuid(uuid)
                 .orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
-        return new MemberDto();
+        member.changeStatus(memberStatus);
+        memberRepository.save(member);
     }
 
     public MemberDto getMemberByJwt() {
         //TODO 미구현: 내 쿠키(토큰) 기반 정보 조회
         return new MemberDto();
     }
+
 }
