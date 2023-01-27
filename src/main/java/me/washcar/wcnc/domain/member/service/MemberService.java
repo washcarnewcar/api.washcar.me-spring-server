@@ -6,6 +6,8 @@ import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
 import me.washcar.wcnc.domain.member.dto.response.MemberDto;
+import me.washcar.wcnc.global.error.BusinessError;
+import me.washcar.wcnc.global.error.BusinessException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -48,23 +50,29 @@ public class MemberService {
     }
 
     public MemberDto getMemberByUuid(String uuid) {
-        Member member = memberRepository.findByUuid(uuid).orElseThrow();
+        Member member = memberRepository.findByUuid(uuid)
+                .orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
         return modelMapper.map(member, MemberDto.class);
     }
 
     public MemberDto putMemberByUuid(String uuid) {
         //TODO 미구현: 해당 유저 정보 수정
-        Member member = memberRepository.findByUuid(uuid).orElseThrow();
+        Member member = memberRepository.findByUuid(uuid)
+                .orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
         return new MemberDto();
     }
 
     public MemberDto deleteMemberByUuid(String uuid) {
         //TODO 미구현: 해당 유저 삭제
-        Member member = memberRepository.findByUuid(uuid).orElseThrow();
+        Member member = memberRepository.findByUuid(uuid)
+                .orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
         return new MemberDto();
     }
 
     public MemberDto patchMemberByUuid(String uuid) {
+        //TODO 미구현: 해당 유저 패치
+        Member member = memberRepository.findByUuid(uuid)
+                .orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
         return new MemberDto();
     }
 

@@ -16,4 +16,13 @@ public class ExceptionAdvice {
                 .title("ConstraintViolationException")
                 .build();
     }
+
+    @ExceptionHandler(BusinessException.class)
+    public ErrorResponse businessExceptionHandler(BusinessException exception) {
+        BusinessError businessError = exception.getBusinessError();
+        return ErrorResponse
+                .builder(exception, businessError.getHttpStatus(), businessError.getMessage())
+                .title("BusinessException")
+                .build();
+    }
 }
