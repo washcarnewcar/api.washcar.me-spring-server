@@ -62,7 +62,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{uuid}")
-    public ResponseEntity<MemberDto> patchMemberByUuid(
+    public ResponseEntity<Void> patchMemberByUuid(
             @PathVariable @Pattern(regexp = REGEXP_UUID_V4) String uuid,
             @RequestBody MemberPatchRequestDto memberPatchRequestDto) {
         MemberStatus memberStatus = memberPatchRequestDto.getMemberStatus();
