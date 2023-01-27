@@ -22,7 +22,7 @@ public class ExceptionAdvice {
     public ErrorResponse constraintViolationExceptionHandler(ConstraintViolationException exception) {
         return ErrorResponse
                 .builder(exception, HttpStatus.BAD_REQUEST, exception.getMessage())
-                .title("ConstraintViolationException")
+                .title(exception.getClass().getSimpleName())
                 .build();
     }
 
@@ -31,7 +31,16 @@ public class ExceptionAdvice {
         BusinessError businessError = exception.getBusinessError();
         return ErrorResponse
                 .builder(exception, businessError.getHttpStatus(), businessError.getMessage())
-                .title("BusinessException")
+                .title(exception.getClass().getSimpleName())
                 .build();
     }
+
+    @ExceptionHandler
+    public ErrorResponse generalExceptionHandler(Exception exception) {
+        return ErrorResponse
+                .builder(exception, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage())
+                .title(exception.getClass().getSimpleName())
+                .build();
+    }
+
 }
