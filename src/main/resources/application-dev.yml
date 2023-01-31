@@ -6,3 +6,6 @@ spring:
     properties:
       hibernate:
         '[format_sql]': true
+
+cors:
+  origin: http://localhost:3000
