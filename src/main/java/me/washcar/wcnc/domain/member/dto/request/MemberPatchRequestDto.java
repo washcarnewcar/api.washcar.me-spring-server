@@ -6,6 +6,6 @@ import me.washcar.wcnc.domain.member.MemberStatus;
 @Getter
 public class MemberPatchRequestDto {
 
-    private MemberStatus memberStatus;
+	private MemberStatus memberStatus;
 
 }

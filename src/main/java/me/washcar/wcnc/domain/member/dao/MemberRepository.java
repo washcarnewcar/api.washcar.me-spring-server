@@ -1,16 +1,17 @@
 package me.washcar.wcnc.domain.member.dao;
 
-import me.washcar.wcnc.domain.member.Member;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import me.washcar.wcnc.domain.member.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    Page<Member> findAll(Pageable pageable);
+	Page<Member> findAll(Pageable pageable);
 
-    Optional<Member> findByUuid(String uuid);
+	Optional<Member> findByUuid(String uuid);
 
 }

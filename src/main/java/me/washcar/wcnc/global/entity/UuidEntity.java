@@ -1,11 +1,11 @@
 package me.washcar.wcnc.global.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import lombok.Getter;
-
-import java.util.UUID;
 
 /**
  * 개발 편의를 위해 BINARY 가 아닌 String 의 형태로 UUID 를 저장합니다
@@ -16,12 +16,12 @@ import java.util.UUID;
 @Getter
 public class UuidEntity extends BaseEntity {
 
-    @Column(nullable = false, length = 36)
-    private String uuid;
+	@Column(nullable = false, length = 36)
+	private String uuid;
 
-    @PrePersist
-    private void onCreate(){
-        this.uuid = UUID.randomUUID().toString();
-    }
+	@PrePersist
+	private void onCreate() {
+		this.uuid = UUID.randomUUID().toString();
+	}
 
 }

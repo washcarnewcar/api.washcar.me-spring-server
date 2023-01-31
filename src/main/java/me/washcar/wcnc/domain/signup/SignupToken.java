@@ -9,10 +9,10 @@ import me.washcar.wcnc.global.entity.BaseEntity;
 @Getter
 public class SignupToken extends BaseEntity {
 
-    @Column(nullable = false)
-    private String telephone;
+	@Column(nullable = false)
+	private String telephone;
 
-    @Column(nullable = false)
-    private String token;
+	@Column(nullable = false)
+	private String token;
 
 }
