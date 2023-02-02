@@ -98,7 +98,7 @@ class MemberRepositoryTest {
 			Optional<Member> result = memberRepository.findByUuid(member.getUuid());
 
 			//then
-			assertThat(result.isPresent()).isTrue();
+			assertThat(result).isPresent();
 			assertThat(result.get().getUuid()).isEqualTo(member.getUuid());
 			assertThat(result.get().getMemberStatus()).isEqualTo(MemberStatus.ACTIVE);
 		}
@@ -113,7 +113,7 @@ class MemberRepositoryTest {
 			Optional<Member> result = memberRepository.findByUuid(UUID.randomUUID().toString());
 
 			//then
-			assertThat(result.isPresent()).isFalse();
+			assertThat(result).isEmpty();
 		}
 
 		@Test
@@ -126,7 +126,7 @@ class MemberRepositoryTest {
 			Optional<Member> result = memberRepository.findByUuid(UUID.randomUUID().toString());
 
 			//then
-			assertThat(result.isPresent()).isFalse();
+			assertThat(result).isEmpty();
 		}
 
 	}
