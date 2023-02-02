@@ -1,9 +1,7 @@
 package me.washcar.wcnc.domain.member.dao;
 
-import static me.washcar.wcnc.domain.member.MemberRole.*;
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,41 +16,35 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import me.washcar.wcnc.domain.member.Member;
-import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberStatus;
+import me.washcar.wcnc.domain.member.MemberTestHelper;
 
 @SpringBootTest
 @Transactional
 class MemberRepositoryTest {
 
 	@Autowired
-	private MemberRepository underTest;
+	private MemberRepository memberRepository;
+
+	@Autowired
+	private MemberTestHelper memberTestHelper;
 
 	@Nested
 	@DisplayName("멤버 목록 페이징")
 	class memberPage {
 
 		@Test
-		@DisplayName("멤버가 한 명인 경우 성공한다")
+		@DisplayName("멤버가 한 명인 경우 멤버 조회에 성공한다")
 		void should_success_when_singleMember() {
 			//given
-			Member member = Member.builder()
-				.name("Gilteun")
-				.memberRole(USER)
-				.memberStatus(MemberStatus.ACTIVE)
-				.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
-				.password("randomPassword")
-				.telephone("01077778888")
-				.stores(new ArrayList<>())
-				.reservations(new ArrayList<>())
-				.build();
-			underTest.save(member);
+			Member member = memberTestHelper.makeStaticMember();
+			memberRepository.save(member);
 			int page = 0;
 			int size = 12;
 
 			//when
 			Pageable pageable = PageRequest.of(page, size);
-			Page<Member> resultPage = underTest.findAll(pageable);
+			Page<Member> resultPage = memberRepository.findAll(pageable);
 
 			//then
 			assertThat(resultPage.getPageable()).isEqualTo(pageable);
@@ -65,11 +57,11 @@ class MemberRepositoryTest {
 
 			assertThat(resultPage.get().findFirst().isPresent()).isTrue();
 			assertThat(resultPage.get().findFirst().get()).isEqualTo(member);
-			assertThat(resultPage.get().findFirst().get().getName()).isEqualTo("Gilteun");
+			assertThat(resultPage.get().findFirst().get().getName()).isEqualTo(member.getName());
 		}
 
 		@Test
-		@DisplayName("멤버가 없는 경우에도 성공한다")
+		@DisplayName("멤버가 없는 경우에도 멤버 조회에 성공한다")
 		void should_success_when_zeroMember() {
 			//given
 			int page = 0;
@@ -77,7 +69,7 @@ class MemberRepositoryTest {
 
 			//when
 			Pageable pageable = PageRequest.of(page, size);
-			Page<Member> resultPage = underTest.findAll(pageable);
+			Page<Member> resultPage = memberRepository.findAll(pageable);
 
 			//then
 			assertThat(resultPage.getPageable()).isEqualTo(pageable);
@@ -96,23 +88,14 @@ class MemberRepositoryTest {
 	class memberUuid {
 
 		@Test
-		@DisplayName("멤버가 존재하는 경우 성공한다")
+		@DisplayName("멤버가 존재하는 경우 멤버 조회에 성공한다")
 		void should_success_when_memberExist() {
 			//given
-			Member member = Member.builder()
-				.name("Gilteun")
-				.memberRole(USER)
-				.memberStatus(MemberStatus.ACTIVE)
-				.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
-				.password("randomPassword")
-				.telephone("01077778888")
-				.stores(new ArrayList<>())
-				.reservations(new ArrayList<>())
-				.build();
-			underTest.save(member);
+			Member member = memberTestHelper.makeRandomMember();
+			memberRepository.save(member);
 
 			//when
-			Optional<Member> result = underTest.findByUuid(member.getUuid());
+			Optional<Member> result = memberRepository.findByUuid(member.getUuid());
 
 			//then
 			assertThat(result.isPresent()).isTrue();
@@ -121,24 +104,26 @@ class MemberRepositoryTest {
 		}
 
 		@Test
-		@DisplayName("멤버가 존재하지 않는 경우 실패한다")
+		@DisplayName("멤버가 존재하지 않는 경우 멤버 조회에 실패한다")
 		void should_fail_when_memberNotExist() {
 			//given
+			//INTENDED-BLANK
 
 			//when
-			Optional<Member> result = underTest.findByUuid(UUID.randomUUID().toString());
+			Optional<Member> result = memberRepository.findByUuid(UUID.randomUUID().toString());
 
 			//then
 			assertThat(result.isPresent()).isFalse();
 		}
 
 		@Test
-		@DisplayName("잘못된 UUID 양식인 경우 실패한다")
+		@DisplayName("잘못된 UUID 양식인 경우 멤버 조회에 실패한다")
 		void should_fail_when_wrongUuidFormat() {
 			//given
+			//INTENDED-BLANK
 
 			//when
-			Optional<Member> result = underTest.findByUuid("bad-uuid-example");
+			Optional<Member> result = memberRepository.findByUuid(UUID.randomUUID().toString());
 
 			//then
 			assertThat(result.isPresent()).isFalse();
