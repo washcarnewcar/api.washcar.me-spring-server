@@ -59,4 +59,24 @@ public class MemberTestHelper {
 			.build();
 	}
 
+	public Member makeActiveMember() {
+		return makeRandomMember();
+	}
+
+	public Member makeInactiveMember() {
+		String prefix = "RandomMember-";
+		String randomName = prefix.concat(generateRandomName());
+		String randomPassword = prefix.concat(generateRandomPassword());
+		String randomTelephone = generateRandomTelephone();
+		return Member.builder()
+			.name(randomName)
+			.memberRole(USER)
+			.memberStatus(MemberStatus.INACTIVE)
+			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
+			.password(randomPassword)
+			.telephone(randomTelephone)
+			.stores(new ArrayList<>())
+			.reservations(new ArrayList<>())
+			.build();
+	}
 }
