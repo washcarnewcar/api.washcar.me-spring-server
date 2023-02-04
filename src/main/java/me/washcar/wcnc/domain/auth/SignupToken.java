@@ -1,4 +1,4 @@
-package me.washcar.wcnc.domain.signup;
+package me.washcar.wcnc.domain.auth;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

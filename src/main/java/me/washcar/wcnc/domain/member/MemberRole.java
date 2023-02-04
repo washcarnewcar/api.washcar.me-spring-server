@@ -1,7 +1,13 @@
 package me.washcar.wcnc.domain.member;
 
-public enum MemberRole {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-	USER, OWNER, ADMIN, SUPERMAN
+@RequiredArgsConstructor
+@Getter
+public enum MemberRole {
+	ROLE_USER("USER"), ROLE_OWNER("OWNER"), ROLE_ADMIN("ADMIN"), ROLE_SUPERMAN("SUPERMAN");
+
+	private final String name;
 
 }

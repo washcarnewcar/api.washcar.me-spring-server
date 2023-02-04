@@ -9,3 +9,6 @@ spring:
 
 cors:
   origin: https://www.washcar.me
+
+cookie:
+  domain: washcar.me

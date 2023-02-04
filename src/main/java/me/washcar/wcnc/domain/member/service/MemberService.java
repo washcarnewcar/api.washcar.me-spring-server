@@ -8,6 +8,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -21,21 +25,23 @@ import me.washcar.wcnc.global.error.BusinessException;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
 	private final MemberRepository memberRepository;
 	private final ModelMapper modelMapper;
+	private final PasswordEncoder passwordEncoder;
 
 	public void postMember() {
 		//TODO 추후 회원가입 로직으로 변경 필요
 
 		//멤버 더미를 DB에 추가하는 로직
 		Member randomMember = Member.builder()
+			.userId("admin")
 			.name("Gilteun")
-			.memberRole(USER)
+			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.ACTIVE)
 			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
-			.password("password")
+			.password(passwordEncoder.encode("password"))
 			.telephone("01022223333")
 			.stores(new ArrayList<>())
 			.reservations(new ArrayList<>())
@@ -81,4 +87,9 @@ public class MemberService {
 		return new MemberDto();
 	}
 
+	@Override
+	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+		return memberRepository.findByUserId(userId)
+			.orElseThrow(() -> new UsernameNotFoundException(BusinessError.MEMBER_NOT_FOUND.getMessage()));
+	}
 }

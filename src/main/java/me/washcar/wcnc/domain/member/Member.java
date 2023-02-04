@@ -1,10 +1,14 @@
 package me.washcar.wcnc.domain.member;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +31,10 @@ import me.washcar.wcnc.global.entity.UuidEntity;
 @SQLDelete(sql = "UPDATE member SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 @Table(indexes = @Index(name = "uuid_member_index", columnList = "uuid"))
-public class Member extends UuidEntity {
+public class Member extends UuidEntity implements UserDetails {
+
+	@Column(nullable = false)
+	private String userId;    // 로그인에 필요한 로그인 아이디
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -57,9 +64,10 @@ public class Member extends UuidEntity {
 	private List<Reservation> reservations = new ArrayList<>();
 
 	@Builder
-	private Member(String name, MemberStatus memberStatus, MemberRole memberRole,
+	private Member(String userId, String name, MemberStatus memberStatus, MemberRole memberRole,
 		MemberAuthenticationType memberAuthenticationType, String password, String telephone, List<Store> stores,
 		List<Reservation> reservations) {
+		this.userId = userId;
 		this.name = name;
 		this.memberStatus = memberStatus;
 		this.memberRole = memberRole;
@@ -72,5 +80,36 @@ public class Member extends UuidEntity {
 
 	public void changeStatus(MemberStatus status) {
 		this.memberStatus = status;
+	}
+
+	////////////// Implements UserDetails //////////////
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(this.memberRole.name()));
+	}
+
+	@Override
+	public String getUsername() {
+		return this.userId;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return this.memberStatus.equals(MemberStatus.ACTIVE);
 	}
 }

@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import me.washcar.wcnc.domain.member.Member;
 import me.washcar.wcnc.domain.member.MemberStatus;
@@ -38,7 +39,7 @@ class MemberServiceTest {
 
 	@BeforeEach
 	void setUp() {
-		memberService = new MemberService(memberRepository, modelMapper);
+		memberService = new MemberService(memberRepository, modelMapper, new BCryptPasswordEncoder());
 		memberTestHelper = new MemberTestHelper();
 	}
 

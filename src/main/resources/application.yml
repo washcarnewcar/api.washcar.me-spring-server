@@ -10,3 +10,9 @@ spring:
   output:
     ansi:
       enabled: always
+
+cookie:
+  max-age: 7776000  # 60*60*24*90, 90일
+
+jwt:
+  secret: ${JWT_SECRET}

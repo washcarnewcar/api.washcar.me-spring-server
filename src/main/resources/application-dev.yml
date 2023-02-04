@@ -9,3 +9,6 @@ spring:
 
 cors:
   origin: http://localhost:3000
+
+cookie:
+  domain: localhost
