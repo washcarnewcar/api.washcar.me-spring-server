@@ -23,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfiguration {
 
 	private final JwtAuthorizationFilter jwtAuthorizationFilter;
+	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private static final String[] WHITELIST = {
 		"/v2/**" //TODO 배포 전 화이트리스트 재설정 필요
 	};
@@ -30,10 +32,16 @@ public class SecurityConfiguration {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-		http.cors().and().csrf().disable();
+		http.csrf().disable()
+			.cors();
+
+		http.formLogin().disable().logout().disable();
 
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+		http.exceptionHandling()
+			.accessDeniedHandler(jwtAccessDeniedHandler)
+			.authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
 		http.authorizeHttpRequests()
 			// .requestMatchers(WHITELIST).permitAll()
