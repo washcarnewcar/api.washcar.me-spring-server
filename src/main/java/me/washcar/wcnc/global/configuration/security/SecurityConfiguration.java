@@ -4,7 +4,6 @@ import static me.washcar.wcnc.domain.member.MemberRole.*;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -45,9 +44,12 @@ public class SecurityConfiguration {
 
 		http.authorizeHttpRequests()
 			// .requestMatchers(WHITELIST).permitAll()
-			.requestMatchers(HttpMethod.POST, "/v2/login", "/v2/refresh-token").permitAll()
-			.requestMatchers("/v2/member", "/v2/member/**").hasRole(ROLE_ADMIN.name())
-			.anyRequest().authenticated();
+			// AuthController
+			.requestMatchers("/v2/login", "/v2/logout", "/v2/check/**", "/v2/refresh-token", "/v2/signup", "/v2/pin",
+				"/v2/telephone-login").permitAll()
+			// MemberController
+			.requestMatchers("/v2/member/**").hasRole(ROLE_ADMIN.name())
+			.anyRequest().denyAll();
 
 		http.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

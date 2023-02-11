@@ -8,9 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +22,7 @@ import me.washcar.wcnc.global.error.BusinessException;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService implements UserDetailsService {
+public class MemberService {
 
 	private final MemberRepository memberRepository;
 	private final ModelMapper modelMapper;
@@ -36,7 +33,7 @@ public class MemberService implements UserDetailsService {
 
 		//멤버 더미를 DB에 추가하는 로직
 		Member randomMember = Member.builder()
-			.userId("admin")
+			.memberId("admin")
 			.name("Gilteun")
 			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.ACTIVE)
@@ -86,11 +83,5 @@ public class MemberService implements UserDetailsService {
 	public MemberDto getMemberByJwt() {
 		//TODO 미구현: 내 쿠키(토큰) 기반 정보 조회
 		return null;
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		return memberRepository.findByUserId(userId)
-			.orElseThrow(() -> new UsernameNotFoundException(BusinessError.MEMBER_NOT_FOUND.getMessage()));
 	}
 }

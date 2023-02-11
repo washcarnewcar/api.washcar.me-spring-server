@@ -33,8 +33,8 @@ import me.washcar.wcnc.global.entity.UuidEntity;
 @Table(indexes = @Index(name = "uuid_member_index", columnList = "uuid"))
 public class Member extends UuidEntity implements UserDetails {
 
-	@Column(nullable = false)
-	private String userId;    // 로그인에 필요한 로그인 아이디
+	@Column(nullable = false, unique = true)
+	private String memberId;    // 로그인에 필요한 로그인 아이디
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -50,8 +50,10 @@ public class Member extends UuidEntity implements UserDetails {
 
 	private String name;
 
+	@Column(nullable = false)
 	private String password;
 
+	@Column(nullable = false, unique = true)
 	private String telephone;
 
 	@Column(nullable = false)
@@ -64,10 +66,10 @@ public class Member extends UuidEntity implements UserDetails {
 	private List<Reservation> reservations = new ArrayList<>();
 
 	@Builder
-	private Member(String userId, String name, MemberStatus memberStatus, MemberRole memberRole,
+	private Member(String memberId, String name, MemberStatus memberStatus, MemberRole memberRole,
 		MemberAuthenticationType memberAuthenticationType, String password, String telephone, List<Store> stores,
 		List<Reservation> reservations) {
-		this.userId = userId;
+		this.memberId = memberId;
 		this.name = name;
 		this.memberStatus = memberStatus;
 		this.memberRole = memberRole;
@@ -90,7 +92,7 @@ public class Member extends UuidEntity implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return this.userId;
+		return this.memberId;
 	}
 
 	@Override

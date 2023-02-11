@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import me.washcar.wcnc.domain.auth.dto.request.CheckMemberIdDto;
+import me.washcar.wcnc.domain.auth.dto.request.CheckTelDto;
 import me.washcar.wcnc.domain.auth.dto.request.LoginDto;
+import me.washcar.wcnc.domain.auth.dto.request.SignupDto;
 import me.washcar.wcnc.domain.auth.service.AuthService;
 import me.washcar.wcnc.domain.auth.service.CookieService;
 import me.washcar.wcnc.domain.auth.service.JwtService;
@@ -26,7 +30,7 @@ public class AuthController {
 	private final JwtService jwtService;
 
 	@PostMapping("/login")
-	public ResponseEntity<MemberDto> login(HttpServletResponse response, @RequestBody LoginDto loginDto) {
+	public ResponseEntity<MemberDto> login(HttpServletResponse response, @Valid @RequestBody LoginDto loginDto) {
 		try {
 			Member loginMember = authService.authenticate(loginDto);
 			MemberDto memberDto = new MemberDto(loginMember);
@@ -50,7 +54,26 @@ public class AuthController {
 
 		// response.addCookie(cookieService.deleteRefreshTokenCookie());
 
-		return ResponseEntity.status(HttpStatus.OK).build();
+		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/check/member-id")
+	public ResponseEntity<Void> checkMemberId(
+		@Valid @RequestBody CheckMemberIdDto checkMemberIdDto) {
+		authService.checkMemberId(checkMemberIdDto);
+		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/check/tel")
+	public ResponseEntity<Void> checkTel(@Valid @RequestBody CheckTelDto checkTelDto) {
+		authService.checkTel(checkTelDto);
+		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/signup")
+	public ResponseEntity<Void> signup(@Valid @RequestBody SignupDto signupDto) {
+		authService.signup(signupDto);
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/pin")
