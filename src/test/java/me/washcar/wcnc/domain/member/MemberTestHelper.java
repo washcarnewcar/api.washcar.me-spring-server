@@ -31,7 +31,7 @@ public class MemberTestHelper {
 
 	public Member makeStaticMember() {
 		return Member.builder()
-			.name("StaticMember-00AA")
+			.nickname("StaticMember-00AA")
 			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.ACTIVE)
 			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
@@ -48,7 +48,7 @@ public class MemberTestHelper {
 		String randomPassword = prefix.concat(generateRandomPassword());
 		String randomTelephone = generateRandomTelephone();
 		return Member.builder()
-			.name(randomName)
+			.nickname(randomName)
 			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.ACTIVE)
 			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
@@ -69,7 +69,7 @@ public class MemberTestHelper {
 		String randomPassword = prefix.concat(generateRandomPassword());
 		String randomTelephone = generateRandomTelephone();
 		return Member.builder()
-			.name(randomName)
+			.nickname(randomName)
 			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.INACTIVE)
 			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)

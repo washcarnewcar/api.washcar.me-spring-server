@@ -1,4 +1,4 @@
-package me.washcar.wcnc.domain.member.service;
+package me.washcar.wcnc.domain.auth.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

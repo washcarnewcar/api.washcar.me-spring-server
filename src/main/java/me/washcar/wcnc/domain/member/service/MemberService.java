@@ -34,7 +34,7 @@ public class MemberService {
 		//멤버 더미를 DB에 추가하는 로직
 		Member randomMember = Member.builder()
 			.memberId("admin")
-			.name("Gilteun")
+			.nickname("Gilteun")
 			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.ACTIVE)
 			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)

@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.auth.SignupToken;
 import me.washcar.wcnc.domain.auth.dao.SignupTokenRepository;
@@ -41,17 +42,21 @@ public class AuthService {
 	private final MemberRepository memberRepository;
 	private final SignupTokenRepository signupTokenRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final CookieService cookieService;
 
 	/**
 	 *	userId와 password를 입력받아 인증 후 해당 id의 Member객체를 반환한다.
 	 */
-	public Member authenticate(LoginDto loginDto) throws AuthenticationException {
+	public Member login(LoginDto loginDto, HttpServletResponse response) throws AuthenticationException {
 		String userId = loginDto.getMemberId();
 		String password = loginDto.getPassword();
 		// userId와 password로 인증을 수행한다. => 성공하면 계속 진행, 실패하면 403 응답
 		Authentication authentication = authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(userId, password));
-		return (Member)authentication.getPrincipal();
+
+		Member loginMember = (Member)authentication.getPrincipal();
+		cookieService.authenticate(loginMember, response);
+		return loginMember;
 	}
 
 	public void checkMemberId(CheckMemberIdDto checkMemberIdDto) {
@@ -135,7 +140,7 @@ public class AuthService {
 		// member 객체 생성
 		Member member = Member.builder()
 			.memberId(signupDto.getMemberId())
-			.name(signupDto.getName())
+			.nickname(signupDto.getNickname())
 			.password(passwordEncoder.encode(signupDto.getPassword()))
 			.telephone(signupDto.getTelephone())
 			.memberRole(ROLE_USER)

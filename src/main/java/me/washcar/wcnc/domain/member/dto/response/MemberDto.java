@@ -1,6 +1,7 @@
 package me.washcar.wcnc.domain.member.dto.response;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import me.washcar.wcnc.domain.member.Member;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
@@ -9,6 +10,7 @@ import me.washcar.wcnc.domain.member.MemberStatus;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class MemberDto {
 
 	private String memberId;
@@ -21,7 +23,7 @@ public class MemberDto {
 
 	private MemberAuthenticationType memberAuthenticationType;
 
-	private String name;
+	private String nickname;
 
 	private String telephone;
 
@@ -31,7 +33,7 @@ public class MemberDto {
 		this.memberStatus = member.getMemberStatus();
 		this.memberRole = member.getMemberRole();
 		this.memberAuthenticationType = member.getMemberAuthenticationType();
-		this.name = member.getName();
+		this.nickname = member.getNickname();
 		this.telephone = member.getTelephone();
 	}
 

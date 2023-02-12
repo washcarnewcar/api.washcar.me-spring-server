@@ -10,7 +10,7 @@ public class SignupDto {
 	private String memberId;
 
 	@Pattern(regexp = Regex.NAME, message = Regex.NAME_MSG)
-	private String name;
+	private String nickname;
 
 	@Pattern(regexp = Regex.PASSWORD, message = Regex.PASSWORD_MSG)
 	private String password;

@@ -9,6 +9,7 @@ import lombok.Getter;
 @Getter
 public enum BusinessError {
 
+	ID_PASSWORD_AUTH_FAILED(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 틀렸습니다."),
 	MEMBER_ID_DUPLICATED(HttpStatus.CONFLICT, "중복된 아이디 입니다."),
 	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
 	MEMBER_TEL_DUPLICATED(HttpStatus.CONFLICT, "중복된 휴대폰 번호 입니다."),

@@ -1,4 +1,4 @@
-package me.washcar.wcnc.global.configuration.security;
+package me.washcar.wcnc.global.filter;
 
 import java.io.IOException;
 import java.util.List;

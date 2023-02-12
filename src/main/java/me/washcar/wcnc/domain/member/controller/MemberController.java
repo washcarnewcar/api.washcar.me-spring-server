@@ -3,6 +3,7 @@ package me.washcar.wcnc.domain.member.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,10 +84,10 @@ public class MemberController {
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<MemberDto> getMemberByJwt() {
+	public ResponseEntity<MemberDto> getMemberByJwt(@AuthenticationPrincipal String uuid) {
 		return ResponseEntity
 			.status(HttpStatus.OK)
-			.body(memberService.getMemberByJwt());
+			.body(memberService.getMemberByUuid(uuid));
 	}
 
 }

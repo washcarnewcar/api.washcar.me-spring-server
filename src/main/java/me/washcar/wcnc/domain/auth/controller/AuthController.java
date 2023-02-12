@@ -17,9 +17,10 @@ import me.washcar.wcnc.domain.auth.dto.request.LoginDto;
 import me.washcar.wcnc.domain.auth.dto.request.SignupDto;
 import me.washcar.wcnc.domain.auth.service.AuthService;
 import me.washcar.wcnc.domain.auth.service.CookieService;
-import me.washcar.wcnc.domain.auth.service.JwtService;
 import me.washcar.wcnc.domain.member.Member;
 import me.washcar.wcnc.domain.member.dto.response.MemberDto;
+import me.washcar.wcnc.global.error.BusinessError;
+import me.washcar.wcnc.global.error.BusinessException;
 
 @Controller
 @RequestMapping("/v2")
@@ -27,24 +28,16 @@ import me.washcar.wcnc.domain.member.dto.response.MemberDto;
 public class AuthController {
 	private final AuthService authService;
 	private final CookieService cookieService;
-	private final JwtService jwtService;
 
 	@PostMapping("/login")
 	public ResponseEntity<MemberDto> login(HttpServletResponse response, @Valid @RequestBody LoginDto loginDto) {
 		try {
-			Member loginMember = authService.authenticate(loginDto);
+			Member loginMember = authService.login(loginDto, response);
 			MemberDto memberDto = new MemberDto(loginMember);
-			String accessToken = jwtService.generateAccessToken(loginMember);
-			response.addCookie(cookieService.makeAccessTokenCookie(accessToken));
-
-			// 당장은 refresh token이 필요없다고 판단됨. 일단 access token만 구현
-			// String refreshToken = jwtService.generateRefreshToken(loginMember);
-			// response.addCookie(cookieService.makeRefreshTokenCookie(refreshToken));
-
 			return ResponseEntity.status(HttpStatus.OK).body(memberDto);
 		} catch (AuthenticationException e) {
 			// 비밀번호가 틀릴 시 401 반환
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			throw new BusinessException(BusinessError.ID_PASSWORD_AUTH_FAILED);
 		}
 	}
 

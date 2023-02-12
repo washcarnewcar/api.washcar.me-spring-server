@@ -7,8 +7,15 @@ spring:
       hibernate:
         '[format_sql]': false
 
-cors:
-  origin: https://www.washcar.me
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            redirect-uri: https://api.washcar.me/v2/oauth2/code/kakao
+
+front-server:
+  domain: https://www.washcar.me
 
 cookie:
   domain: washcar.me

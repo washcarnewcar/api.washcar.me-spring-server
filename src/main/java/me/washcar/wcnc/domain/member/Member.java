@@ -18,6 +18,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,13 +28,15 @@ import me.washcar.wcnc.global.entity.UuidEntity;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE member SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 @Table(indexes = @Index(name = "uuid_member_index", columnList = "uuid"))
 public class Member extends UuidEntity implements UserDetails {
 
-	@Column(nullable = false, unique = true)
+	@Column(unique = true)
 	private String memberId;    // 로그인에 필요한 로그인 아이디
 
 	@Enumerated(EnumType.STRING)
@@ -48,37 +51,28 @@ public class Member extends UuidEntity implements UserDetails {
 	@Column(nullable = false)
 	private MemberAuthenticationType memberAuthenticationType;
 
-	private String name;
+	private String nickname;
 
-	@Column(nullable = false)
 	private String password;
 
 	@Column(nullable = false, unique = true)
 	private String telephone;
 
+	@Builder.Default
 	@Column(nullable = false)
 	private Boolean deleted = Boolean.FALSE;
 
+	@Builder.Default
 	@OneToMany(mappedBy = "owner")
 	private List<Store> stores = new ArrayList<>();
 
+	@Builder.Default
 	@OneToMany(mappedBy = "member")
 	private List<Reservation> reservations = new ArrayList<>();
 
-	@Builder
-	private Member(String memberId, String name, MemberStatus memberStatus, MemberRole memberRole,
-		MemberAuthenticationType memberAuthenticationType, String password, String telephone, List<Store> stores,
-		List<Reservation> reservations) {
-		this.memberId = memberId;
-		this.name = name;
-		this.memberStatus = memberStatus;
-		this.memberRole = memberRole;
-		this.memberAuthenticationType = memberAuthenticationType;
-		this.password = password;
-		this.telephone = telephone;
-		this.stores = stores;
-		this.reservations = reservations;
-	}
+	@Builder.Default
+	@OneToMany(mappedBy = "member")
+	private List<OAuth> oAuths = new ArrayList<>();
 
 	public void changeStatus(MemberStatus status) {
 		this.memberStatus = status;
@@ -114,4 +108,22 @@ public class Member extends UuidEntity implements UserDetails {
 	public boolean isEnabled() {
 		return this.memberStatus.equals(MemberStatus.ACTIVE);
 	}
+
+	////////////// Implements OAuth2User //////////////
+	//
+	// // Member 자체만으로는 attibutes를 받아올 수 없다.
+	// @Override
+	// public abstract Map<String, Object> getAttributes();
+	//
+	// @Override
+	// public String getName() {
+	// 	return this.getUuid();
+	// }
+	//
+	// ////////////// Required for OAuth //////////////
+	// public abstract String getProvider();
+	//
+	// public abstract String getProviderId();
+	//
+	// public abstract OAuth createOAuth();
 }
