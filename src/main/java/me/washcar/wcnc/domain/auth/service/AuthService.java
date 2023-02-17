@@ -3,16 +3,12 @@ package me.washcar.wcnc.domain.auth.service;
 import static me.washcar.wcnc.domain.member.MemberRole.*;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,15 +17,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.auth.SignupToken;
 import me.washcar.wcnc.domain.auth.dao.SignupTokenRepository;
-import me.washcar.wcnc.domain.auth.dto.request.CheckMemberIdDto;
-import me.washcar.wcnc.domain.auth.dto.request.CheckTelDto;
 import me.washcar.wcnc.domain.auth.dto.request.LoginDto;
 import me.washcar.wcnc.domain.auth.dto.request.SignupDto;
 import me.washcar.wcnc.domain.member.Member;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
-import me.washcar.wcnc.domain.member.MemberRole;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
+import me.washcar.wcnc.global.error.ApplicationError;
+import me.washcar.wcnc.global.error.ApplicationException;
 import me.washcar.wcnc.global.error.BusinessError;
 import me.washcar.wcnc.global.error.BusinessException;
 
@@ -59,25 +54,20 @@ public class AuthService {
 		return loginMember;
 	}
 
-	public void checkMemberId(CheckMemberIdDto checkMemberIdDto) {
-		String memberId = checkMemberIdDto.getMemberId();
-		Optional<Member> member = memberRepository.findByMemberId(memberId);
-
-		if (member.isPresent()) {
+	public void checkMemberId(String loginId) {
+		if (!memberRepository.existsByLoginId(loginId)) {
 			throw new BusinessException(BusinessError.MEMBER_ID_DUPLICATED);
 		}
-
 	}
 
-	public void checkTel(CheckTelDto checkTelDto) {
+	public void checkTelephone(String telephone) {
 		// 동일한 휴대폰 번호로 가입한 이력이 있는지 확인
-		Optional<Member> member = memberRepository.findByTelephone(checkTelDto.getTelephone());
-		if (member.isPresent()) {
+		if (memberRepository.existsByTelephone(telephone)) {
 			throw new BusinessException(BusinessError.MEMBER_TEL_DUPLICATED);
 		}
 
-		SignupToken foundFirstSignupToken = signupTokenRepository.findFirstByTelephoneOrderByCreatedDateDesc(
-			checkTelDto.getTelephone()).orElse(null);
+		SignupToken foundFirstSignupToken = signupTokenRepository.findFirstByTelephoneOrderByCreatedDateDesc(telephone)
+			.orElse(null);
 		// 이미 인증번호를 보낸 이력이 있을 때
 		if (foundFirstSignupToken != null) {
 			// 30초가 지나지 않았다면 예외를 발생시킨다.
@@ -95,22 +85,10 @@ public class AuthService {
 		// TODO 메시지로 토큰 보내기
 
 		SignupToken signupToken = SignupToken.builder()
-			.telephone(checkTelDto.getTelephone())
+			.telephone(telephone)
 			.token(token)
 			.build();
 		signupTokenRepository.save(signupToken);
-	}
-
-	public boolean isAdmin() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-		for (GrantedAuthority authority : authorities) {
-			if (authority.getAuthority().equals(MemberRole.ROLE_SUPERMAN.getName()) ||
-				authority.getAuthority().equals(MemberRole.ROLE_ADMIN.getName())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public void signup(SignupDto signupDto) {
@@ -119,29 +97,23 @@ public class AuthService {
 		// 한시간 안에 전송했던 인증번호들과만 비교
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime oneHourBefore = now.minusHours(1);
-		boolean isSignupToken = signupTokenRepository.existsByTelephoneAndTokenAndCreatedDateAfter(
-			signupDto.getTelephone(), signupDto.getToken(), oneHourBefore);
-		if (!isSignupToken) {
+		if (!signupTokenRepository.existsByTelephoneAndTokenAndCreatedDateAfter(signupDto.getTelephone(),
+			signupDto.getToken(), oneHourBefore)) {
 			throw new BusinessException(BusinessError.TOKEN_NOT_VALID);
 		}
 
-		// id가 중복된 Member가 있는지
-		boolean isMemberIdDuplicated = memberRepository.existsByMemberId(signupDto.getMemberId());
-		if (isMemberIdDuplicated) {
+		if (memberRepository.existsByLoginId(signupDto.getMemberId())) {
 			throw new BusinessException(BusinessError.MEMBER_ID_DUPLICATED);
 		}
 
-		// telephone이 중복된 Member가 있는지
-		boolean isTelephoneDuplicated = memberRepository.existsByTelephone(signupDto.getTelephone());
-		if (isTelephoneDuplicated) {
+		if (memberRepository.existsByTelephone(signupDto.getTelephone())) {
 			throw new BusinessException(BusinessError.MEMBER_TEL_DUPLICATED);
 		}
 
-		// member 객체 생성
 		Member member = Member.builder()
-			.memberId(signupDto.getMemberId())
+			.loginId(signupDto.getMemberId())
 			.nickname(signupDto.getNickname())
-			.password(passwordEncoder.encode(signupDto.getPassword()))
+			.loginPassword(passwordEncoder.encode(signupDto.getPassword()))
 			.telephone(signupDto.getTelephone())
 			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.ACTIVE)
@@ -153,7 +125,7 @@ public class AuthService {
 		// 해당 member와 관련된 인증번호들은 데이터베이스에서 삭제
 		long deleteCount = signupTokenRepository.deleteAllByTelephone(signupDto.getTelephone());
 		if (deleteCount <= 0) {
-			throw new BusinessException(BusinessError.TOKEN_NOT_DELETED);
+			throw new ApplicationException(ApplicationError.TOKEN_NOT_DELETED);
 		}
 	}
 }

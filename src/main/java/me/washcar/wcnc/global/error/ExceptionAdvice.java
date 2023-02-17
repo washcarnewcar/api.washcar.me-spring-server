@@ -71,6 +71,15 @@ public class ExceptionAdvice {
 			.build();
 	}
 
+	@ExceptionHandler(ApplicationException.class)
+	public ErrorResponse applicationExceptionHandler(ApplicationException exception) {
+		// 추후에 개발자에게 알려주는 로직 추가 필요
+		return ErrorResponse
+			.builder(exception, HttpStatus.INTERNAL_SERVER_ERROR, exception.getApplicationError().getMessage())
+			.title(exception.getClass().getSimpleName())
+			.build();
+	}
+
 	@ExceptionHandler
 	public ErrorResponse generalExceptionHandler(Exception exception) {
 		return ErrorResponse

@@ -13,7 +13,7 @@ import me.washcar.wcnc.domain.member.MemberStatus;
 @NoArgsConstructor
 public class MemberDto {
 
-	private String memberId;
+	private String loginId;
 
 	private String uuid;
 
@@ -28,7 +28,7 @@ public class MemberDto {
 	private String telephone;
 
 	public MemberDto(Member member) {
-		this.memberId = member.getMemberId();
+		this.loginId = member.getLoginId();
 		this.uuid = member.getUuid();
 		this.memberStatus = member.getMemberStatus();
 		this.memberRole = member.getMemberRole();

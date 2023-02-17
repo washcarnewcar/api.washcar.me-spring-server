@@ -18,43 +18,30 @@ public class CookieService {
 	private final JwtService jwtService;
 
 	public Cookie makeAccessTokenCookie(String token) {
-		Cookie cookie = new Cookie("access_token", token);
-		cookie.setSecure(true);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-		cookie.setDomain(domain);
-		cookie.setMaxAge(maxAge);
-		return cookie;
+		return makeCookie("access_token", token, maxAge);
 	}
 
 	public Cookie makeRefreshTokenCookie(String token) {
-		Cookie cookie = new Cookie("refresh_token", token);
+		return makeCookie("refresh_token", token, maxAge);
+	}
+
+	public Cookie deleteAccessTokenCookie() {
+		return makeCookie("access_token", null, 0);
+	}
+
+	public Cookie deleteRefreshTokenCookie() {
+		return makeCookie("refresh_token", null, 0);
+	}
+
+	private Cookie makeCookie(String key, String value, int maxAge) {
+		Cookie cookie = new Cookie(key, value);
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
 		cookie.setDomain(domain);
 		cookie.setMaxAge(maxAge);
 		return cookie;
-	}
 
-	public Cookie deleteAccessTokenCookie() {
-		Cookie cookie = new Cookie("access_token", null);
-		cookie.setSecure(true);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-		cookie.setDomain(domain);
-		cookie.setMaxAge(0);
-		return cookie;
-	}
-
-	public Cookie deleteRefreshTokenCookie() {
-		Cookie cookie = new Cookie("refresh_token", null);
-		cookie.setSecure(true);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-		cookie.setDomain(domain);
-		cookie.setMaxAge(0);
-		return cookie;
 	}
 
 	public void authenticate(Member member, HttpServletResponse response) {

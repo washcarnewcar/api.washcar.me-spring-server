@@ -2,8 +2,6 @@ package me.washcar.wcnc.domain.member.service;
 
 import static me.washcar.wcnc.domain.member.MemberRole.*;
 
-import java.util.ArrayList;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,15 +31,13 @@ public class MemberService {
 
 		//멤버 더미를 DB에 추가하는 로직
 		Member randomMember = Member.builder()
-			.memberId("admin")
+			.loginId("admin")
 			.nickname("Gilteun")
 			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.ACTIVE)
 			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
-			.password(passwordEncoder.encode("password"))
+			.loginPassword(passwordEncoder.encode("password"))
 			.telephone("01022223333")
-			.stores(new ArrayList<>())
-			.reservations(new ArrayList<>())
 			.build();
 
 		memberRepository.save(randomMember);

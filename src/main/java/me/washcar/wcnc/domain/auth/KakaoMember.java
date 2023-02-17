@@ -32,7 +32,7 @@ public class KakaoMember implements OAuth2Member {
 		this.providerId = attributes.get("id").toString();
 		this.nickname = profile.get("nickname").toString();
 		this.telephone = kakaoAccount.get("phone_number").toString();
-		
+
 		this.member = Member.builder()
 			.memberStatus(MemberStatus.ACTIVE)
 			.memberRole(MemberRole.ROLE_USER)

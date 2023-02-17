@@ -18,7 +18,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,16 +27,16 @@ import me.washcar.wcnc.global.entity.UuidEntity;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @SQLDelete(sql = "UPDATE member SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 @Table(indexes = @Index(name = "uuid_member_index", columnList = "uuid"))
 public class Member extends UuidEntity implements UserDetails {
 
 	@Column(unique = true)
-	private String memberId;    // 로그인에 필요한 로그인 아이디
+	private String loginId;    // 로그인에 필요한 로그인 아이디
+
+	private String loginPassword;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -53,24 +52,18 @@ public class Member extends UuidEntity implements UserDetails {
 
 	private String nickname;
 
-	private String password;
-
 	@Column(nullable = false, unique = true)
 	private String telephone;
 
-	@Builder.Default
 	@Column(nullable = false)
 	private Boolean deleted = Boolean.FALSE;
 
-	@Builder.Default
 	@OneToMany(mappedBy = "owner")
 	private List<Store> stores = new ArrayList<>();
 
-	@Builder.Default
 	@OneToMany(mappedBy = "member")
 	private List<Reservation> reservations = new ArrayList<>();
 
-	@Builder.Default
 	@OneToMany(mappedBy = "member")
 	private List<OAuth> oAuths = new ArrayList<>();
 
@@ -78,15 +71,33 @@ public class Member extends UuidEntity implements UserDetails {
 		this.memberStatus = status;
 	}
 
+	@Builder
+	@SuppressWarnings("unused")
+	private Member(String loginId, MemberStatus memberStatus, MemberRole memberRole,
+		MemberAuthenticationType memberAuthenticationType, String nickname, String loginPassword, String telephone) {
+		this.loginId = loginId;
+		this.memberStatus = memberStatus;
+		this.memberRole = memberRole;
+		this.memberAuthenticationType = memberAuthenticationType;
+		this.nickname = nickname;
+		this.loginPassword = loginPassword;
+		this.telephone = telephone;
+	}
+
 	////////////// Implements UserDetails //////////////
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(this.memberRole.name()));
+	public String getUsername() {
+		return this.loginId;
 	}
 
 	@Override
-	public String getUsername() {
-		return this.memberId;
+	public String getPassword() {
+		return this.loginPassword;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(this.memberRole.name()));
 	}
 
 	@Override
@@ -108,22 +119,4 @@ public class Member extends UuidEntity implements UserDetails {
 	public boolean isEnabled() {
 		return this.memberStatus.equals(MemberStatus.ACTIVE);
 	}
-
-	////////////// Implements OAuth2User //////////////
-	//
-	// // Member 자체만으로는 attibutes를 받아올 수 없다.
-	// @Override
-	// public abstract Map<String, Object> getAttributes();
-	//
-	// @Override
-	// public String getName() {
-	// 	return this.getUuid();
-	// }
-	//
-	// ////////////// Required for OAuth //////////////
-	// public abstract String getProvider();
-	//
-	// public abstract String getProviderId();
-	//
-	// public abstract OAuth createOAuth();
 }

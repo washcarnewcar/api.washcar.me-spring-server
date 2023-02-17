@@ -4,17 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.washcar.wcnc.global.entity.BaseEntity;
 
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OAuth extends BaseEntity {
 
 	// member 안에 있는 getAuthorization을 바로 사용하기 위해 의도적으로 EAGER로 설정했습니다.
@@ -28,4 +26,11 @@ public class OAuth extends BaseEntity {
 	@Column(nullable = false)
 	private String provider;
 
+	@Builder
+	@SuppressWarnings("unused")
+	private OAuth(Member member, String providerId, String provider) {
+		this.member = member;
+		this.providerId = providerId;
+		this.provider = provider;
+	}
 }

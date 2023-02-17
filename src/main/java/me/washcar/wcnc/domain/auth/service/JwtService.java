@@ -43,26 +43,6 @@ public class JwtService {
 			.compact();
 	}
 
-	// public String generateAccessToken(Member member) {
-	// 	return Jwts.builder()
-	// 		.setSubject(member.getUuid())
-	// 		.claim("role", member.getMemberRole())
-	// 		.setIssuedAt(new Date())
-	// 		.setExpiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRE_MILLIS))
-	// 		.signWith(Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
-	// 		.compact();
-	// }
-	//
-	// public String generateRefreshToken(Member member) {
-	// 	return Jwts.builder()
-	// 		.setSubject(member.getUuid())
-	// 		.claim("role", member.getMemberRole())
-	// 		.setIssuedAt(new Date())
-	// 		.setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRE_MILLIS))
-	// 		.signWith(Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
-	// 		.compact();
-	// }
-
 	public Claims extractClaims(String token) throws RuntimeException {
 		JwtParser jwtParser = Jwts.parserBuilder()
 			.setSigningKey(Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8)))

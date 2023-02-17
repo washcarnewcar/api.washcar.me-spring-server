@@ -1,5 +1,7 @@
 package me.washcar.wcnc.global.configuration.security;
 
+import static me.washcar.wcnc.domain.member.MemberRole.*;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.auth.service.OAuth2MemberService;
-import me.washcar.wcnc.domain.member.MemberRole;
 import me.washcar.wcnc.global.filter.JwtAuthorizationFilter;
 import me.washcar.wcnc.global.handler.JwtAccessDeniedHandler;
 import me.washcar.wcnc.global.handler.JwtAuthenticationEntryPoint;
@@ -32,9 +33,6 @@ public class SecurityConfiguration {
 	private final OAuth2MemberService oAuth2MemberService;
 	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 	private final OAuth2FailureHandler oAuth2FailureHandler;
-	private static final String[] WHITELIST = {
-		"/v2/**" //TODO 배포 전 화이트리스트 재설정 필요
-	};
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,10 +58,10 @@ public class SecurityConfiguration {
 			.authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
 		http.authorizeHttpRequests()
-			// .requestMatchers(WHITELIST).permitAll()
 
 			// AuthController
-			.requestMatchers("/v2/login", "/v2/logout", "/v2/check/*", "/v2/signup", "/v2/pin", "/v2/telephone-login")
+			.requestMatchers("/v2/login", "/v2/logout", "/v2/members/login-id", "/v2/members/telephone",
+				"/v2/member/me", "/v2/signup", "/v2/pin", "/v2/telephone-login")
 			.permitAll()
 
 			// OAuth2
@@ -71,9 +69,8 @@ public class SecurityConfiguration {
 			.permitAll()
 
 			// MemberController
-			.requestMatchers("/v2/member/me").permitAll()
 			.requestMatchers("/v2/member/**")
-			.hasAnyRole(MemberRole.ROLE_ADMIN.name(), MemberRole.ROLE_SUPERMAN.getName())
+			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
 
 			// Any Request
 			.anyRequest()
