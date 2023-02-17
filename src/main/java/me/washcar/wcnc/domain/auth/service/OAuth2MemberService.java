@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.auth.KakaoMember;
 import me.washcar.wcnc.domain.auth.OAuth2Member;
-import me.washcar.wcnc.domain.member.Member;
 import me.washcar.wcnc.domain.member.OAuth;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
 import me.washcar.wcnc.domain.member.dao.OAuthRepository;
+import me.washcar.wcnc.domain.member.entity.Member;
 
 @Service
 @RequiredArgsConstructor

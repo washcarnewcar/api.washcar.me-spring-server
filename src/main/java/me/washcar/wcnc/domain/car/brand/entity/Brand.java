@@ -1,4 +1,4 @@
-package me.washcar.wcnc.domain.car.brand;
+package me.washcar.wcnc.domain.car.brand.entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -6,7 +6,7 @@ import java.util.Set;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
-import me.washcar.wcnc.domain.car.model.Model;
+import me.washcar.wcnc.domain.car.model.entity.Model;
 import me.washcar.wcnc.global.entity.BaseEntity;
 
 @Entity

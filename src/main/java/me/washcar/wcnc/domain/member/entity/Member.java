@@ -1,4 +1,4 @@
-package me.washcar.wcnc.domain.member;
+package me.washcar.wcnc.domain.member.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,8 +21,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.washcar.wcnc.domain.reservation.Reservation;
-import me.washcar.wcnc.domain.store.Store;
+import me.washcar.wcnc.domain.member.MemberAuthenticationType;
+import me.washcar.wcnc.domain.member.MemberRole;
+import me.washcar.wcnc.domain.member.MemberStatus;
+import me.washcar.wcnc.domain.member.OAuth;
+import me.washcar.wcnc.domain.reservation.entity.Reservation;
+import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.global.entity.UuidEntity;
 
 @Entity
@@ -119,4 +123,5 @@ public class Member extends UuidEntity implements UserDetails {
 	public boolean isEnabled() {
 		return this.memberStatus.equals(MemberStatus.ACTIVE);
 	}
+
 }

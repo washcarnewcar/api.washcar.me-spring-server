@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.global.entity.BaseEntity;
 
 @Entity

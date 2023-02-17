@@ -1,4 +1,4 @@
-package me.washcar.wcnc.domain.car.model;
+package me.washcar.wcnc.domain.car.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
-import me.washcar.wcnc.domain.car.brand.Brand;
-import me.washcar.wcnc.domain.reservation.Reservation;
+import me.washcar.wcnc.domain.car.brand.entity.Brand;
+import me.washcar.wcnc.domain.reservation.entity.Reservation;
 import me.washcar.wcnc.global.entity.BaseEntity;
 
 @Entity

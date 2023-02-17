@@ -6,11 +6,11 @@ import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 
 import lombok.Getter;
-import me.washcar.wcnc.domain.member.Member;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberRole;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.OAuth;
+import me.washcar.wcnc.domain.member.entity.Member;
 
 @Getter
 public class KakaoMember implements OAuth2Member {

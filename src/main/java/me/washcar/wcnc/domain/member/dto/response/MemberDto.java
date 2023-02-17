@@ -3,10 +3,10 @@ package me.washcar.wcnc.domain.member.dto.response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import me.washcar.wcnc.domain.member.Member;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberRole;
 import me.washcar.wcnc.domain.member.MemberStatus;
+import me.washcar.wcnc.domain.member.entity.Member;
 
 @Getter
 @Setter

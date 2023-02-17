@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
+import me.washcar.wcnc.domain.member.entity.Member;
+
 @Component
 public class MemberTestHelper {
 

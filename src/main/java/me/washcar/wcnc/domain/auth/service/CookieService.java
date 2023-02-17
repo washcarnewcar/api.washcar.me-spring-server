@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.domain.member.Member;
+import me.washcar.wcnc.domain.member.entity.Member;
 
 @Service
 @RequiredArgsConstructor

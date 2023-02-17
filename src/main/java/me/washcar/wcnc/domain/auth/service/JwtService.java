@@ -12,7 +12,7 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import me.washcar.wcnc.domain.member.Member;
+import me.washcar.wcnc.domain.member.entity.Member;
 
 @Service
 public class JwtService {

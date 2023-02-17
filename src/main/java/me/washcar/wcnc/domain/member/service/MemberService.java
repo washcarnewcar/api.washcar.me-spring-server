@@ -10,11 +10,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.domain.member.Member;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
 import me.washcar.wcnc.domain.member.dto.response.MemberDto;
+import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.global.error.BusinessError;
 import me.washcar.wcnc.global.error.BusinessException;
 

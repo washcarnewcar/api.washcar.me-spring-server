@@ -1,17 +1,18 @@
-package me.washcar.wcnc.domain.store.operationHours;
+package me.washcar.wcnc.domain.store.entity.operation;
 
 import java.time.LocalTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
-import me.washcar.wcnc.domain.store.Store;
+import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.global.entity.BaseEntity;
 
 @Entity
 @Getter
-public class StoreOperationHours extends BaseEntity {
+public class StoreOperationHour extends BaseEntity {
 
 	@Column(nullable = false)
 	private LocalTime sundayStartTime;
@@ -55,7 +56,7 @@ public class StoreOperationHours extends BaseEntity {
 	@Column(nullable = false)
 	private LocalTime saturdayEndTime;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "storeOperationHour")
 	private Store store;
 
 }
