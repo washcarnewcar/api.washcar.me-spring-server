@@ -1,10 +1,14 @@
 package me.washcar.wcnc.domain.member.entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +24,7 @@ import lombok.NoArgsConstructor;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberRole;
 import me.washcar.wcnc.domain.member.MemberStatus;
+import me.washcar.wcnc.domain.member.OAuth;
 import me.washcar.wcnc.domain.reservation.entity.Reservation;
 import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.global.entity.UuidEntity;
@@ -30,7 +35,12 @@ import me.washcar.wcnc.global.entity.UuidEntity;
 @SQLDelete(sql = "UPDATE member SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 @Table(indexes = @Index(name = "uuid_member_index", columnList = "uuid"))
-public class Member extends UuidEntity {
+public class Member extends UuidEntity implements UserDetails {
+
+	@Column(unique = true)
+	private String loginId;    // 로그인에 필요한 로그인 아이디
+
+	private String loginPassword;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -44,10 +54,9 @@ public class Member extends UuidEntity {
 	@Column(nullable = false)
 	private MemberAuthenticationType memberAuthenticationType;
 
-	private String name;
+	private String nickname;
 
-	private String password;
-
+	@Column(nullable = false, unique = true)
 	private String telephone;
 
 	@Column(nullable = false)
@@ -59,22 +68,60 @@ public class Member extends UuidEntity {
 	@OneToMany(mappedBy = "member")
 	private List<Reservation> reservations = new ArrayList<>();
 
-	@Builder
-	private Member(String name, MemberStatus memberStatus, MemberRole memberRole,
-		MemberAuthenticationType memberAuthenticationType, String password, String telephone, List<Store> stores,
-		List<Reservation> reservations) {
-		this.name = name;
-		this.memberStatus = memberStatus;
-		this.memberRole = memberRole;
-		this.memberAuthenticationType = memberAuthenticationType;
-		this.password = password;
-		this.telephone = telephone;
-		this.stores = stores;
-		this.reservations = reservations;
-	}
+	@OneToMany(mappedBy = "member")
+	private List<OAuth> oAuths = new ArrayList<>();
 
 	public void changeStatus(MemberStatus status) {
 		this.memberStatus = status;
+	}
+
+	@Builder
+	@SuppressWarnings("unused")
+	private Member(String loginId, MemberStatus memberStatus, MemberRole memberRole,
+		MemberAuthenticationType memberAuthenticationType, String nickname, String loginPassword, String telephone) {
+		this.loginId = loginId;
+		this.memberStatus = memberStatus;
+		this.memberRole = memberRole;
+		this.memberAuthenticationType = memberAuthenticationType;
+		this.nickname = nickname;
+		this.loginPassword = loginPassword;
+		this.telephone = telephone;
+	}
+
+	////////////// Implements UserDetails //////////////
+	@Override
+	public String getUsername() {
+		return this.loginId;
+	}
+
+	@Override
+	public String getPassword() {
+		return this.loginPassword;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(this.memberRole.name()));
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return this.memberStatus.equals(MemberStatus.ACTIVE);
 	}
 
 }

@@ -16,7 +16,7 @@ import lombok.Getter;
 @Getter
 public class UuidEntity extends BaseEntity {
 
-	@Column(nullable = false, length = 36)
+	@Column(nullable = false, length = 36, unique = true)
 	private String uuid;
 
 	@PrePersist

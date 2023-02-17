@@ -81,12 +81,4 @@ public class MemberController {
 			.status(HttpStatus.NO_CONTENT)
 			.build();
 	}
-
-	@GetMapping("/me")
-	public ResponseEntity<MemberDto> getMemberByJwt() {
-		return ResponseEntity
-			.status(HttpStatus.OK)
-			.body(memberService.getMemberByJwt());
-	}
-
 }

@@ -7,5 +7,15 @@ spring:
       hibernate:
         '[format_sql]': true
 
-cors:
-  origin: http://localhost:3000
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            redirect-uri: http://localhost/v2/oauth2/code/kakao
+
+front-server:
+  domain: http://localhost:3000
+
+cookie:
+  domain: localhost

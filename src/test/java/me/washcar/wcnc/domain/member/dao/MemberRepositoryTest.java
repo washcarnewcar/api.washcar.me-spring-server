@@ -57,7 +57,7 @@ class MemberRepositoryTest {
 
 			assertThat(resultPage.get().findFirst().isPresent()).isTrue();
 			assertThat(resultPage.get().findFirst().get()).isEqualTo(member);
-			assertThat(resultPage.get().findFirst().get().getName()).isEqualTo(member.getName());
+			assertThat(resultPage.get().findFirst().get().getNickname()).isEqualTo(member.getNickname());
 		}
 
 		@Test

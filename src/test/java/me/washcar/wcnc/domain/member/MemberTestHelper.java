@@ -2,7 +2,6 @@ package me.washcar.wcnc.domain.member;
 
 import static me.washcar.wcnc.domain.member.MemberRole.*;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
@@ -33,31 +32,30 @@ public class MemberTestHelper {
 
 	public Member makeStaticMember() {
 		return Member.builder()
-			.name("StaticMember-00AA")
-			.memberRole(USER)
+			.loginId("00AA")
+			.nickname("StaticMember-00AA")
+			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.ACTIVE)
 			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
-			.password("StaticMember-PASSWORD")
+			.loginPassword("StaticMember-PASSWORD")
 			.telephone("01010002000")
-			.stores(new ArrayList<>())
-			.reservations(new ArrayList<>())
 			.build();
 	}
 
 	public Member makeRandomMember() {
 		String prefix = "RandomMember-";
-		String randomName = prefix.concat(generateRandomName());
+		String randomSuffix = generateRandomName();
+		String randomName = prefix.concat(randomSuffix);
 		String randomPassword = prefix.concat(generateRandomPassword());
 		String randomTelephone = generateRandomTelephone();
 		return Member.builder()
-			.name(randomName)
-			.memberRole(USER)
+			.loginId(randomSuffix)
+			.nickname(randomName)
+			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.ACTIVE)
 			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
-			.password(randomPassword)
+			.loginPassword(randomPassword)
 			.telephone(randomTelephone)
-			.stores(new ArrayList<>())
-			.reservations(new ArrayList<>())
 			.build();
 	}
 
@@ -67,18 +65,18 @@ public class MemberTestHelper {
 
 	public Member makeInactiveMember() {
 		String prefix = "RandomMember-";
-		String randomName = prefix.concat(generateRandomName());
+		String randomSuffix = generateRandomName();
+		String randomName = prefix.concat(randomSuffix);
 		String randomPassword = prefix.concat(generateRandomPassword());
 		String randomTelephone = generateRandomTelephone();
 		return Member.builder()
-			.name(randomName)
-			.memberRole(USER)
+			.loginId(randomSuffix)
+			.nickname(randomName)
+			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.INACTIVE)
 			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
-			.password(randomPassword)
+			.loginPassword(randomPassword)
 			.telephone(randomTelephone)
-			.stores(new ArrayList<>())
-			.reservations(new ArrayList<>())
 			.build();
 	}
 }
