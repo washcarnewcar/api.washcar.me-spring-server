@@ -1,4 +1,4 @@
-package me.washcar.wcnc.domain.store.operationHours;
+package me.washcar.wcnc.domain.store.entity.operation;
 
 import java.time.LocalDateTime;
 
@@ -9,13 +9,13 @@ import jakarta.persistence.Index;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
-import me.washcar.wcnc.domain.store.Store;
+import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.global.entity.UuidEntity;
 
 @Entity
 @Getter
 @Table(indexes = @Index(name = "uuid_store_operation_exception_index", columnList = "uuid"))
-public class StoreOperationException extends UuidEntity {
+public class StoreOperationHoliday extends UuidEntity {
 
 	@Column(nullable = false)
 	private LocalDateTime startDateTime;
