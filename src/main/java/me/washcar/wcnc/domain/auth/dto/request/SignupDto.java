@@ -10,13 +10,13 @@ import me.washcar.wcnc.global.definition.RegexMessage;
 public class SignupDto {
 
 	@Pattern(regexp = Regex.MEMBER_ID, message = RegexMessage.MEMBER_ID)
-	private String memberId;
+	private String loginId;
 
 	@Pattern(regexp = Regex.NAME, message = RegexMessage.NAME)
 	private String nickname;
 
 	@Pattern(regexp = Regex.PASSWORD, message = RegexMessage.PASSWORD)
-	private String password;
+	private String loginPassword;
 
 	@Pattern(regexp = Regex.TELEPHONE, message = RegexMessage.TELEPHONE)
 	private String telephone;
