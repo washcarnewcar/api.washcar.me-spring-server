@@ -43,27 +43,27 @@ public class AuthService {
 	 *	userId와 password를 입력받아 인증 후 해당 id의 Member객체를 반환한다.
 	 */
 	public Member login(LoginDto loginDto, HttpServletResponse response) throws AuthenticationException {
-		String userId = loginDto.getMemberId();
-		String password = loginDto.getPassword();
+		String loginId = loginDto.getLoginId();
+		String loginPassword = loginDto.getLoginPassword();
 		// userId와 password로 인증을 수행한다. => 성공하면 계속 진행, 실패하면 403 응답
 		Authentication authentication = authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(userId, password));
+			new UsernamePasswordAuthenticationToken(loginId, loginPassword));
 
 		Member loginMember = (Member)authentication.getPrincipal();
 		cookieService.authenticate(loginMember, response);
 		return loginMember;
 	}
 
-	public void checkMemberId(String loginId) {
-		if (!memberRepository.existsByLoginId(loginId)) {
-			throw new BusinessException(BusinessError.MEMBER_ID_DUPLICATED);
+	public void checkLoginId(String loginId) {
+		if (memberRepository.existsByLoginId(loginId)) {
+			throw new BusinessException(BusinessError.LOGIN_ID_DUPLICATED);
 		}
 	}
 
 	public void checkTelephone(String telephone) {
 		// 동일한 휴대폰 번호로 가입한 이력이 있는지 확인
 		if (memberRepository.existsByTelephone(telephone)) {
-			throw new BusinessException(BusinessError.MEMBER_TEL_DUPLICATED);
+			throw new BusinessException(BusinessError.MEMBER_TELEPHONE_DUPLICATED);
 		}
 
 		SignupToken foundFirstSignupToken = signupTokenRepository.findFirstByTelephoneOrderByCreatedDateDesc(telephone)
@@ -74,7 +74,7 @@ public class AuthService {
 			LocalDateTime now = LocalDateTime.now();
 			LocalDateTime plus30SecondsAtCreatedDate = foundFirstSignupToken.getCreatedDate().plusSeconds(30);
 			if (now.isBefore(plus30SecondsAtCreatedDate)) {
-				throw new BusinessException(BusinessError.TOO_FAST_TOKEN);
+				throw new BusinessException(BusinessError.SIGNUP_TOKEN_TOO_FAST);
 			}
 		}
 
@@ -99,21 +99,21 @@ public class AuthService {
 		LocalDateTime oneHourBefore = now.minusHours(1);
 		if (!signupTokenRepository.existsByTelephoneAndTokenAndCreatedDateAfter(signupDto.getTelephone(),
 			signupDto.getToken(), oneHourBefore)) {
-			throw new BusinessException(BusinessError.TOKEN_NOT_VALID);
+			throw new BusinessException(BusinessError.SIGNUP_TOKEN_NOT_VALID);
 		}
 
-		if (memberRepository.existsByLoginId(signupDto.getMemberId())) {
-			throw new BusinessException(BusinessError.MEMBER_ID_DUPLICATED);
+		if (memberRepository.existsByLoginId(signupDto.getLoginId())) {
+			throw new BusinessException(BusinessError.LOGIN_ID_DUPLICATED);
 		}
 
 		if (memberRepository.existsByTelephone(signupDto.getTelephone())) {
-			throw new BusinessException(BusinessError.MEMBER_TEL_DUPLICATED);
+			throw new BusinessException(BusinessError.MEMBER_TELEPHONE_DUPLICATED);
 		}
 
 		Member member = Member.builder()
-			.loginId(signupDto.getMemberId())
+			.loginId(signupDto.getLoginId())
 			.nickname(signupDto.getNickname())
-			.loginPassword(passwordEncoder.encode(signupDto.getPassword()))
+			.loginPassword(passwordEncoder.encode(signupDto.getLoginPassword()))
 			.telephone(signupDto.getTelephone())
 			.memberRole(ROLE_USER)
 			.memberStatus(MemberStatus.ACTIVE)

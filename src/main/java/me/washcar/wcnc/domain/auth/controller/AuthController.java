@@ -6,10 +6,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -58,17 +58,23 @@ public class AuthController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/members/login-id")
-	public ResponseEntity<Void> checkMemberId(
-		@Valid @RequestParam("login-id") @Pattern(regexp = Regex.MEMBER_ID, message = RegexMessage.MEMBER_ID) String loginId) {
-		authService.checkMemberId(loginId);
+	@GetMapping("/members/login-id/{login-id}")
+	public ResponseEntity<Void> checkLoginId(
+		@Valid @PathVariable("login-id") @Pattern(regexp = Regex.MEMBER_ID, message = RegexMessage.MEMBER_ID) String loginId) {
+		authService.checkLoginId(loginId);
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/members/telephone")
-	public ResponseEntity<Void> checkTel(
-		@Valid @RequestParam @NotNull @Pattern(regexp = Regex.TELEPHONE, message = RegexMessage.TELEPHONE) String telephone) {
+	@GetMapping("/members/telephone/{telephone}")
+	public ResponseEntity<Void> checkTelephone(
+		@Valid @PathVariable("telephone") @NotNull @Pattern(regexp = Regex.TELEPHONE, message = RegexMessage.TELEPHONE) String telephone) {
 		authService.checkTelephone(telephone);
+		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/signup")
+	public ResponseEntity<Void> signup(@Valid @RequestBody SignupDto signupDto) {
+		authService.signup(signupDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -77,12 +83,6 @@ public class AuthController {
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(memberService.getMemberByUuid(uuid));
-	}
-
-	@PostMapping("/signup")
-	public ResponseEntity<Void> signup(@Valid @RequestBody SignupDto signupDto) {
-		authService.signup(signupDto);
-		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/pin")

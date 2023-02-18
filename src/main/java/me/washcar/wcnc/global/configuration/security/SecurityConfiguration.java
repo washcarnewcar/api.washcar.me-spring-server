@@ -60,8 +60,8 @@ public class SecurityConfiguration {
 		http.authorizeHttpRequests()
 
 			// AuthController
-			.requestMatchers("/v2/login", "/v2/logout", "/v2/members/login-id", "/v2/members/telephone",
-				"/v2/member/me", "/v2/signup", "/v2/pin", "/v2/telephone-login")
+			.requestMatchers("/v2/login", "/v2/logout", "/v2/members/login-id/*", "/v2/members/telephone/*",
+				"/v2/members/me", "/v2/signup", "/v2/pin", "/v2/telephone-login")
 			.permitAll()
 
 			// OAuth2
@@ -74,7 +74,7 @@ public class SecurityConfiguration {
 
 			// Any Request
 			.anyRequest()
-			.denyAll();
+			.permitAll();
 
 		http.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -8,9 +8,9 @@ import lombok.Getter;
 public class LoginDto {
 
 	@NotBlank
-	private String memberId;
+	private String loginId;
 
 	@NotBlank
-	private String password;
+	private String loginPassword;
 
 }
