@@ -1,16 +1,12 @@
 package me.washcar.wcnc.domain.member.service;
 
-import static me.washcar.wcnc.domain.member.MemberRole.*;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
 import me.washcar.wcnc.domain.member.dto.response.MemberDto;
@@ -24,24 +20,6 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 	private final ModelMapper modelMapper;
-	private final PasswordEncoder passwordEncoder;
-
-	public void postMember() {
-		//TODO 추후 회원가입 로직으로 변경 필요
-
-		//멤버 더미를 DB에 추가하는 로직
-		Member randomMember = Member.builder()
-			.loginId("admin")
-			.nickname("Gilteun")
-			.memberRole(ROLE_USER)
-			.memberStatus(MemberStatus.ACTIVE)
-			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
-			.loginPassword(passwordEncoder.encode("password"))
-			.telephone("01022223333")
-			.build();
-
-		memberRepository.save(randomMember);
-	}
 
 	public Page<MemberDto> getMemberList(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
@@ -76,8 +54,4 @@ public class MemberService {
 		memberRepository.save(member);
 	}
 
-	public MemberDto getMemberByJwt() {
-		//TODO 미구현: 내 쿠키(토큰) 기반 정보 조회
-		return null;
-	}
 }

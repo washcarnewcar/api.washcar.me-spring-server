@@ -20,12 +20,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.MemberTestHelper;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
+import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.global.error.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +38,7 @@ class MemberServiceTest {
 
 	@BeforeEach
 	void setUp() {
-		memberService = new MemberService(memberRepository, modelMapper, new BCryptPasswordEncoder());
+		memberService = new MemberService(memberRepository, modelMapper);
 		memberTestHelper = new MemberTestHelper();
 	}
 

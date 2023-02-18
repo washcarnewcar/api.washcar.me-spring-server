@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +20,8 @@ import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.dto.request.MemberPatchRequestDto;
 import me.washcar.wcnc.domain.member.dto.response.MemberDto;
 import me.washcar.wcnc.domain.member.service.MemberService;
+import me.washcar.wcnc.global.definition.Regex;
+import me.washcar.wcnc.global.definition.RegexMessage;
 
 @RestController
 @RequestMapping("/v2/member")
@@ -28,17 +29,7 @@ import me.washcar.wcnc.domain.member.service.MemberService;
 @Validated
 public class MemberController {
 
-	private static final String REGEXP_UUID_V4 = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$";
-
 	private final MemberService memberService;
-
-	@PostMapping
-	public ResponseEntity<Void> postMember() {
-		memberService.postMember();
-		return ResponseEntity
-			.status(HttpStatus.NO_CONTENT)
-			.build();
-	}
 
 	@GetMapping
 	public ResponseEntity<Page<MemberDto>> getMemberList(
@@ -50,21 +41,24 @@ public class MemberController {
 	}
 
 	@GetMapping("/{uuid}")
-	public ResponseEntity<MemberDto> getMemberByUuid(@PathVariable @Pattern(regexp = REGEXP_UUID_V4) String uuid) {
+	public ResponseEntity<MemberDto> getMemberByUuid(
+		@PathVariable @Pattern(regexp = Regex.UUID_V4, message = RegexMessage.UUID_V4) String uuid) {
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(memberService.getMemberByUuid(uuid));
 	}
 
 	@PutMapping("/{uuid}")
-	public ResponseEntity<MemberDto> putMemberByUuid(@PathVariable @Pattern(regexp = REGEXP_UUID_V4) String uuid) {
+	public ResponseEntity<MemberDto> putMemberByUuid(
+		@PathVariable @Pattern(regexp = Regex.UUID_V4, message = RegexMessage.UUID_V4) String uuid) {
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(memberService.putMemberByUuid(uuid));
 	}
 
 	@DeleteMapping("/{uuid}")
-	public ResponseEntity<Void> deleteMemberByUuid(@PathVariable @Pattern(regexp = REGEXP_UUID_V4) String uuid) {
+	public ResponseEntity<Void> deleteMemberByUuid(
+		@PathVariable @Pattern(regexp = Regex.UUID_V4, message = RegexMessage.UUID_V4) String uuid) {
 		memberService.deleteMemberByUuid(uuid);
 		return ResponseEntity
 			.status(HttpStatus.NO_CONTENT)
@@ -73,7 +67,7 @@ public class MemberController {
 
 	@PatchMapping("/{uuid}")
 	public ResponseEntity<Void> patchMemberByUuid(
-		@PathVariable @Pattern(regexp = REGEXP_UUID_V4) String uuid,
+		@PathVariable @Pattern(regexp = Regex.UUID_V4, message = RegexMessage.UUID_V4) String uuid,
 		@RequestBody MemberPatchRequestDto memberPatchRequestDto) {
 		MemberStatus memberStatus = memberPatchRequestDto.getMemberStatus();
 		memberService.changeMemberStatusByUuid(uuid, memberStatus);
