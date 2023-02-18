@@ -14,4 +14,6 @@ public class RegexMessage {
 
 	public static final String NAME = "닉네임은 1~12자의 영문, 한글, 숫자, -, _ 만 사용 가능합니다.";
 
+	public static final String UUID_V4 = "고유 식별번호는 UUID 버전 4 형식이어야 합니다.";
+
 }

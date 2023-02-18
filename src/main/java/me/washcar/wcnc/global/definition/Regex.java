@@ -13,4 +13,7 @@ public class Regex {
 	public static final String SLUG = "^[a-zA-Z0-9-]{4,32}$";
 
 	public static final String NAME = "^[a-zA-Z0-9가-힇_-]{1,12}$";
+
+	public static final String UUID_V4 = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$";
+
 }
