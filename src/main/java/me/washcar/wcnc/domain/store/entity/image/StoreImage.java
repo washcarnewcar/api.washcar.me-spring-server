@@ -28,6 +28,7 @@ public class StoreImage extends UuidEntity {
 	private Store store;
 
 	@Builder
+	@SuppressWarnings("unused")
 	private StoreImage(String imageUrl, Store store) {
 		this.imageUrl = imageUrl;
 		this.store = store;

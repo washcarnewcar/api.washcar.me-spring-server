@@ -60,16 +60,16 @@ public class Member extends UuidEntity implements UserDetails {
 	private String telephone;
 
 	@Column(nullable = false)
-	private Boolean deleted = Boolean.FALSE;
+	private boolean deleted;
 
 	@OneToMany(mappedBy = "owner")
-	private List<Store> stores = new ArrayList<>();
+	private final List<Store> stores = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member")
-	private List<Reservation> reservations = new ArrayList<>();
+	private final List<Reservation> reservations = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member")
-	private List<OAuth> oAuths = new ArrayList<>();
+	private final List<OAuth> oAuths = new ArrayList<>();
 
 	public void changeStatus(MemberStatus status) {
 		this.memberStatus = status;
@@ -79,6 +79,7 @@ public class Member extends UuidEntity implements UserDetails {
 	@SuppressWarnings("unused")
 	private Member(String loginId, MemberStatus memberStatus, MemberRole memberRole,
 		MemberAuthenticationType memberAuthenticationType, String nickname, String loginPassword, String telephone) {
+		this.deleted = false;
 		this.loginId = loginId;
 		this.memberStatus = memberStatus;
 		this.memberRole = memberRole;
