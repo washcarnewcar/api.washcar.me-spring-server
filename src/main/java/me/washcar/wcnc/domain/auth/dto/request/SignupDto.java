@@ -6,6 +6,7 @@ import me.washcar.wcnc.global.definition.Regex;
 import me.washcar.wcnc.global.definition.RegexMessage;
 
 @Getter
+@SuppressWarnings("unused")
 public class SignupDto {
 
 	@Pattern(regexp = Regex.MEMBER_ID, message = RegexMessage.MEMBER_ID)
@@ -22,5 +23,5 @@ public class SignupDto {
 
 	@Pattern(regexp = Regex.TOKEN, message = RegexMessage.TOKEN)
 	private String token;
-	
+
 }
