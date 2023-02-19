@@ -98,8 +98,6 @@ public class KakaoAdapter implements OAuth2Adapter {
 		}
 
 		// +82 자르고 - 제거한 뒤 0을 맨 앞에 붙힘
-		String koreanTelephone = "0".concat(internationalTelephone.substring(4).replaceAll("-", ""));
-		System.out.println(koreanTelephone);
-		return koreanTelephone;
+		return "0".concat(internationalTelephone.substring(4).replaceAll("-", ""));
 	}
 }
