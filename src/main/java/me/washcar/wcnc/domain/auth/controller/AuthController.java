@@ -18,11 +18,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.auth.dto.request.LoginDto;
 import me.washcar.wcnc.domain.auth.dto.request.SignupDto;
+import me.washcar.wcnc.domain.auth.dto.response.MemberMeDto;
 import me.washcar.wcnc.domain.auth.service.AuthService;
 import me.washcar.wcnc.domain.auth.service.CookieService;
-import me.washcar.wcnc.domain.member.dto.response.MemberDto;
-import me.washcar.wcnc.domain.member.entity.Member;
-import me.washcar.wcnc.domain.member.service.MemberService;
 import me.washcar.wcnc.global.definition.Regex;
 import me.washcar.wcnc.global.definition.RegexMessage;
 import me.washcar.wcnc.global.error.BusinessError;
@@ -34,14 +32,11 @@ import me.washcar.wcnc.global.error.BusinessException;
 public class AuthController {
 	private final AuthService authService;
 	private final CookieService cookieService;
-	private final MemberService memberService;
 
 	@PostMapping("/login")
-	public ResponseEntity<MemberDto> login(HttpServletResponse response, @Valid @RequestBody LoginDto loginDto) {
+	public ResponseEntity<MemberMeDto> login(HttpServletResponse response, @Valid @RequestBody LoginDto loginDto) {
 		try {
-			Member loginMember = authService.login(loginDto, response);
-			MemberDto memberDto = new MemberDto(loginMember);
-			return ResponseEntity.status(HttpStatus.OK).body(memberDto);
+			return ResponseEntity.ok().body(authService.login(loginDto, response));
 		} catch (AuthenticationException e) {
 			// 비밀번호가 틀릴 시 401 반환
 			throw new BusinessException(BusinessError.ID_PASSWORD_AUTH_FAILED);
@@ -79,10 +74,10 @@ public class AuthController {
 	}
 
 	@GetMapping("/members/me")
-	public ResponseEntity<MemberDto> getMemberByJwt(@AuthenticationPrincipal String uuid) {
+	public ResponseEntity<MemberMeDto> getMemberByJwt(@AuthenticationPrincipal String uuid) {
 		return ResponseEntity
 			.status(HttpStatus.OK)
-			.body(memberService.getMemberByUuid(uuid));
+			.body(authService.getMemberMeByUuid(uuid));
 	}
 
 	@PostMapping("/pin")

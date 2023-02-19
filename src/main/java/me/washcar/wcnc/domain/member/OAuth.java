@@ -21,11 +21,11 @@ public class OAuth extends BaseEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Member member;
 
-	@Column(nullable = false, unique = true)
-	private String providerId;
-
 	@Column(nullable = false)
 	private String provider;
+
+	@Column(nullable = false, unique = true)
+	private String providerId;
 
 	@Builder
 	@SuppressWarnings("unused")
