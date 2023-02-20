@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.domain.auth.adapter.LoginIdAdapter;
+import me.washcar.wcnc.domain.auth.adapter.LoginIdAdapterImpl;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
 import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.global.error.BusinessError;
@@ -21,6 +21,6 @@ public class MemberDetailsService implements UserDetailsService {
 		Member member = memberRepository.findByLoginId(loginId)
 			.orElseThrow(() -> new UsernameNotFoundException(BusinessError.MEMBER_NOT_FOUND.getMessage()));
 
-		return new LoginIdAdapter(member);
+		return new LoginIdAdapterImpl(member);
 	}
 }

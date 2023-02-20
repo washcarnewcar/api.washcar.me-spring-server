@@ -16,7 +16,7 @@ import me.washcar.wcnc.global.error.BusinessException;
 /**
  *  카카오 로그인으로 인증을 시도할 때 사용하는 클래스
  */
-public class KakaoAdapter implements OAuth2Adapter {
+public class KakaoAdapterImpl implements OAuth2Adapter {
 	private final Map<String, Object> attributes;
 	private final String providerId;
 	private String uuid;
@@ -25,10 +25,11 @@ public class KakaoAdapter implements OAuth2Adapter {
 	private final String nickname;
 	private final String telephone;
 
-	@SuppressWarnings("unchecked")
-	public KakaoAdapter(Map<String, Object> attributes) {
+	public KakaoAdapterImpl(Map<String, Object> attributes) {
 		this.attributes = attributes;
+		@SuppressWarnings("unchecked")
 		Map<String, Object> kakaoAccount = (Map<String, Object>)attributes.get("kakao_account");
+		@SuppressWarnings("unchecked")
 		Map<String, Object> profile = (Map<String, Object>)kakaoAccount.get("profile");
 		this.providerId = attributes.get("id").toString();
 		this.nickname = profile.get("nickname").toString();

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import me.washcar.wcnc.domain.member.OAuth;
+import me.washcar.wcnc.domain.member.entity.OAuth;
 
 public interface OAuthRepository extends JpaRepository<OAuth, Long> {
 	Optional<OAuth> findByProviderAndProviderId(String provider, String providerId);

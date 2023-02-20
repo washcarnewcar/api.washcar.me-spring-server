@@ -8,15 +8,15 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.domain.auth.adapter.KakaoAdapter;
+import me.washcar.wcnc.domain.auth.adapter.KakaoAdapterImpl;
 import me.washcar.wcnc.domain.auth.adapter.OAuth2Adapter;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberRole;
 import me.washcar.wcnc.domain.member.MemberStatus;
-import me.washcar.wcnc.domain.member.OAuth;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
 import me.washcar.wcnc.domain.member.dao.OAuthRepository;
 import me.washcar.wcnc.domain.member.entity.Member;
+import me.washcar.wcnc.domain.member.entity.OAuth;
 import me.washcar.wcnc.global.error.BusinessError;
 
 @Service
@@ -34,7 +34,7 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
 
 		OAuth2Adapter oAuth2Adapter;
 		if (provider.equals("kakao")) {
-			oAuth2Adapter = new KakaoAdapter(oAuth2User.getAttributes());
+			oAuth2Adapter = new KakaoAdapterImpl(oAuth2User.getAttributes());
 		} else {
 			throw new OAuth2AuthenticationException(
 				new OAuth2Error(BusinessError.OAUTH_NOT_SUPPORTED_PROVIDER.getMessage()));

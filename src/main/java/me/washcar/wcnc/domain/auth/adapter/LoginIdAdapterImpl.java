@@ -14,14 +14,14 @@ import me.washcar.wcnc.domain.member.entity.Member;
 /**
  * 아이디와 패스워드로 인증을 시도할 때 사용하는 클래스
  */
-public class LoginIdAdapter implements UserDetails, AuthenticationAdapter {
+public class LoginIdAdapterImpl implements UserDetails, AuthenticationAdapter {
 	private final String uuid;
 	private final String loginId;
 	private final String loginPassword;
 	private final MemberStatus memberStatus;
 	private final MemberRole memberRole;
 
-	public LoginIdAdapter(Member member) {
+	public LoginIdAdapterImpl(Member member) {
 		this.uuid = member.getUuid();
 		this.loginId = member.getLoginId();
 		this.loginPassword = member.getLoginPassword();
