@@ -18,6 +18,10 @@ public enum BusinessError {
 	NOT_KOREAN_TELEPHONE(HttpStatus.BAD_REQUEST, "국내 전화번호로만 가입 가능합니다."),
 	OAUTH_NOT_SUPPORTED_PROVIDER(HttpStatus.BAD_REQUEST, "지원되지 않는 서비스 제공자 입니다."),
 	MEMBER_DISABLED(HttpStatus.UNAUTHORIZED, "사용자의 계정이 비활성화 되었습니다."),
+	STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "세차장을 찾을 수 없습니다."),
+	STORE_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 해당 SLUG를 가진 세차장이 존재합니다."),
+	EXCEED_STORE_IMAGE_LIMIT(HttpStatus.CONFLICT, "이미지 최대 등록 가능 횟수를 초과했습니다."),
+	FORBIDDEN_STORE_CHANGE(HttpStatus.FORBIDDEN, "해당 세차장의 정보 수정을 할 권한이 없습니다."),
 	;
 
 	private final HttpStatus httpStatus;

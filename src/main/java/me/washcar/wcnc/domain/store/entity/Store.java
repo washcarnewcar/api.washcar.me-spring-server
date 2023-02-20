@@ -13,7 +13,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.domain.reservation.entity.Reservation;
 import me.washcar.wcnc.domain.store.StoreStatus;
@@ -25,13 +28,14 @@ import me.washcar.wcnc.global.entity.BaseEntity;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(indexes = @Index(name = "slug_store_index", columnList = "slug"))
 public class Store extends BaseEntity {
 
 	public static final int MAX_IMAGE_NUMBER = 6;
 
 	@Column(nullable = false)
-	private StoreStatus status = StoreStatus.PENDING;
+	private StoreStatus status;
 
 	@Column(nullable = false, unique = true)
 	private String slug;
@@ -54,16 +58,16 @@ public class Store extends BaseEntity {
 	private StoreOperationHour storeOperationHour;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")
-	private List<StoreImage> storeImages = new ArrayList<>();
+	private final List<StoreImage> storeImages = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")
-	private List<StoreMenu> storeMenus = new ArrayList<>();
+	private final List<StoreMenu> storeMenus = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")
-	private List<StoreOperationHoliday> storeOperationHolidays = new ArrayList<>();
+	private final List<StoreOperationHoliday> storeOperationHolidays = new ArrayList<>();
 
 	@OneToMany(mappedBy = "store")
-	private List<Reservation> reservations = new ArrayList<>();
+	private final List<Reservation> reservations = new ArrayList<>();
 
 	public void addStoreImage(String imageUrl) {
 		StoreImage storeImage = StoreImage.builder()
@@ -79,6 +83,14 @@ public class Store extends BaseEntity {
 		owner.getStores().add(this);
 	}
 
+	@Builder
+	@SuppressWarnings("unused")
+	private Store(String slug, Location location, String name, String tel, String description,
+		String previewImage) {
+		this.status = StoreStatus.PENDING;
+		updateStore(slug, location, name, tel, description, previewImage);
+	}
+
 	public void updateStore(String slug, Location location, String name, String tel, String description,
 		String previewImage) {
 		this.slug = slug;
@@ -87,6 +99,10 @@ public class Store extends BaseEntity {
 		this.tel = tel;
 		this.description = description;
 		this.previewImage = previewImage;
+	}
+
+	public void updateStatus(StoreStatus status) {
+		this.status = status;
 	}
 
 }
