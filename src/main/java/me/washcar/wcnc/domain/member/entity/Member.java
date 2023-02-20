@@ -1,14 +1,10 @@
 package me.washcar.wcnc.domain.member.entity;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,7 +20,6 @@ import lombok.NoArgsConstructor;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberRole;
 import me.washcar.wcnc.domain.member.MemberStatus;
-import me.washcar.wcnc.domain.member.OAuth;
 import me.washcar.wcnc.domain.reservation.entity.Reservation;
 import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.global.entity.UuidEntity;
@@ -35,7 +30,7 @@ import me.washcar.wcnc.global.entity.UuidEntity;
 @SQLDelete(sql = "UPDATE member SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 @Table(indexes = @Index(name = "uuid_member_index", columnList = "uuid"))
-public class Member extends UuidEntity implements UserDetails {
+public class Member extends UuidEntity {
 
 	@Column(unique = true)
 	private String loginId;    // 로그인에 필요한 로그인 아이디
@@ -88,41 +83,4 @@ public class Member extends UuidEntity implements UserDetails {
 		this.loginPassword = loginPassword;
 		this.telephone = telephone;
 	}
-
-	////////////// Implements UserDetails //////////////
-	@Override
-	public String getUsername() {
-		return this.loginId;
-	}
-
-	@Override
-	public String getPassword() {
-		return this.loginPassword;
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(this.memberRole.name()));
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return this.memberStatus.equals(MemberStatus.ACTIVE);
-	}
-
 }

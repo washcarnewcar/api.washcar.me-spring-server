@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.domain.member.entity.Member;
+import me.washcar.wcnc.domain.member.MemberRole;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +21,7 @@ public class CookieService {
 		return makeCookie("access_token", token, maxAge);
 	}
 
+	@SuppressWarnings("unused")
 	public Cookie makeRefreshTokenCookie(String token) {
 		return makeCookie("refresh_token", token, maxAge);
 	}
@@ -29,6 +30,7 @@ public class CookieService {
 		return makeCookie("access_token", null, 0);
 	}
 
+	@SuppressWarnings("unused")
 	public Cookie deleteRefreshTokenCookie() {
 		return makeCookie("refresh_token", null, 0);
 	}
@@ -44,8 +46,11 @@ public class CookieService {
 
 	}
 
-	public void authenticate(Member member, HttpServletResponse response) {
-		String accessToken = jwtService.generateAccessToken(member);
+	/**
+	 * access token을 쿠키에 등록
+	 */
+	public void authenticate(String uuid, MemberRole role, HttpServletResponse response) {
+		String accessToken = jwtService.generateAccessToken(uuid, role);
 		response.addCookie(this.makeAccessTokenCookie(accessToken));
 		// 당장은 refresh token이 필요없다고 판단됨. 일단 access token만 구현
 		// String refreshToken = jwtService.generateRefreshToken(loginMember);

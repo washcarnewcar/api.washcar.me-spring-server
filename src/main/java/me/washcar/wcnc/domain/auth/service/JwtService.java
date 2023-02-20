@@ -12,7 +12,7 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import me.washcar.wcnc.domain.member.entity.Member;
+import me.washcar.wcnc.domain.member.MemberRole;
 
 @Service
 public class JwtService {
@@ -20,23 +20,26 @@ public class JwtService {
 	@Value("${jwt.secret}")
 	@NonNull
 	private String SECRET;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ACCESS_EXPIRE_MILLIS = 1000 * 60 * 60 * 2; // 2시간
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int REFRESH_EXPIRE_MILLIS = 1000 * 60 * 60 * 5; // 5시간
 
-	public String generateAccessToken(Member member) {
+	public String generateAccessToken(String uuid, MemberRole role) {
 		return Jwts.builder()
-			.setSubject(member.getUuid())
-			.claim("role", member.getMemberRole())
+			.setSubject(uuid)
+			.claim("role", role.name())
 			.setIssuedAt(new Date())
 			.setExpiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRE_MILLIS))
 			.signWith(Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
 			.compact();
 	}
 
-	public String generateRefreshToken(Member member) {
+	@SuppressWarnings("unused")
+	public String generateRefreshToken(String uuid, MemberRole role) {
 		return Jwts.builder()
-			.setSubject(member.getUuid())
-			.claim("role", member.getMemberRole())
+			.setSubject(uuid)
+			.claim("role", role.name())
 			.setIssuedAt(new Date())
 			.setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRE_MILLIS))
 			.signWith(Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)

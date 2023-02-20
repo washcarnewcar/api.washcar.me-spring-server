@@ -16,9 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.auth.SignupToken;
+import me.washcar.wcnc.domain.auth.adapter.AuthenticationAdapter;
 import me.washcar.wcnc.domain.auth.dao.SignupTokenRepository;
 import me.washcar.wcnc.domain.auth.dto.request.LoginDto;
 import me.washcar.wcnc.domain.auth.dto.request.SignupDto;
+import me.washcar.wcnc.domain.auth.dto.response.MemberMeDto;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
@@ -40,18 +42,21 @@ public class AuthService {
 	private final CookieService cookieService;
 
 	/**
-	 *	userId와 password를 입력받아 인증 후 해당 id의 Member객체를 반환한다.
+	 *	loginId 와 loginPassword 를 입력받아 인증 후 해당 id의 MemberMeDto 객체를 반환한다.
 	 */
-	public Member login(LoginDto loginDto, HttpServletResponse response) throws AuthenticationException {
+	public MemberMeDto login(LoginDto loginDto, HttpServletResponse response) throws AuthenticationException {
 		String loginId = loginDto.getLoginId();
 		String loginPassword = loginDto.getLoginPassword();
-		// userId와 password로 인증을 수행한다. => 성공하면 계속 진행, 실패하면 403 응답
+
+		// loginId 와 loginPassword 로 인증을 수행한다. => 성공하면 계속 진행, 실패하면 403 응답
 		Authentication authentication = authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(loginId, loginPassword));
 
-		Member loginMember = (Member)authentication.getPrincipal();
-		cookieService.authenticate(loginMember, response);
-		return loginMember;
+		AuthenticationAdapter adapter = (AuthenticationAdapter)authentication.getPrincipal();
+
+		cookieService.authenticate(adapter.getUuid(), adapter.getMemberRole(), response);
+
+		return this.getMemberMeByUuid(adapter.getUuid());
 	}
 
 	public void checkLoginId(String loginId) {
@@ -127,5 +132,11 @@ public class AuthService {
 		if (deleteCount <= 0) {
 			throw new ApplicationException(ApplicationError.TOKEN_NOT_DELETED);
 		}
+	}
+
+	public MemberMeDto getMemberMeByUuid(String uuid) {
+		Member member = memberRepository.findByUuid(uuid)
+			.orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
+		return new MemberMeDto(member);
 	}
 }
