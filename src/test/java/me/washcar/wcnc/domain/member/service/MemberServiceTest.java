@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,28 +23,28 @@ import org.springframework.data.domain.Pageable;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.MemberTestHelper;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
+import me.washcar.wcnc.domain.member.dto.response.MemberDto;
 import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.global.error.BusinessException;
+import me.washcar.wcnc.global.utility.AuthorizationHelper;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
+
 	@Mock
 	private MemberRepository memberRepository;
+
 	@Mock
-	private ModelMapper modelMapper;
+	private AuthorizationHelper authorizationHelper;
+
 	private MemberTestHelper memberTestHelper;
+
 	private MemberService memberService;
 
 	@BeforeEach
 	void setUp() {
-		memberService = new MemberService(memberRepository, modelMapper);
+		memberService = new MemberService(memberRepository, new ModelMapper(), authorizationHelper);
 		memberTestHelper = new MemberTestHelper();
-	}
-
-	@Test
-	@Disabled
-	void postMember() {
-		//TODO 미구현
 	}
 
 	@Nested
@@ -59,6 +58,7 @@ class MemberServiceTest {
 			int page = 0;
 			int size = 5;
 			Pageable pageable = PageRequest.of(page, size);
+			@SuppressWarnings("unchecked")
 			Page<Member> memberPage = Mockito.mock(Page.class);
 			when(memberRepository.findAll(pageable)).thenReturn(memberPage);
 
@@ -87,7 +87,7 @@ class MemberServiceTest {
 			given(memberRepository.findByUuid(member.getUuid())).willReturn(Optional.of(member));
 
 			//when
-			memberService.getMemberByUuid(member.getUuid());
+			MemberDto resultMemberDto = memberService.getMemberByUuid(member.getUuid());
 
 			//then
 			ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
@@ -95,10 +95,9 @@ class MemberServiceTest {
 			String capturedString = stringArgumentCaptor.getValue();
 			assertThat(capturedString).isEqualTo(member.getUuid());
 
-			ArgumentCaptor<Member> memberArgumentCaptor = ArgumentCaptor.forClass(Member.class);
-			verify(modelMapper).map(memberArgumentCaptor.capture(), any(Class.class));
-			Member capturedMember = memberArgumentCaptor.getValue();
-			assertThat(capturedMember).isEqualTo(member);
+			assertThat(resultMemberDto.getUuid()).isEqualTo(member.getUuid());
+			assertThat(resultMemberDto.getMemberRole()).isEqualTo(member.getMemberRole());
+			assertThat(resultMemberDto.getNickname()).isEqualTo(member.getNickname());
 		}
 
 		@Test
@@ -112,12 +111,6 @@ class MemberServiceTest {
 				.isInstanceOf(BusinessException.class);
 		}
 
-	}
-
-	@Test
-	@Disabled
-	void putMemberByUuid() {
-		//TODO 미구현
 	}
 
 	@Nested
@@ -250,9 +243,4 @@ class MemberServiceTest {
 
 	}
 
-	@Test
-	@Disabled
-	void getMemberByJwt() {
-		//TODO 미구현
-	}
 }
