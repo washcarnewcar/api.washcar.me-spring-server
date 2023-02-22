@@ -5,6 +5,7 @@ import static me.washcar.wcnc.domain.member.MemberRole.*;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import org.slf4j.helpers.MessageFormatter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,12 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.domain.auth.SignupToken;
+import me.washcar.wcnc.domain.aligo.service.AligoService;
 import me.washcar.wcnc.domain.auth.adapter.AuthenticationAdapter;
 import me.washcar.wcnc.domain.auth.dao.SignupTokenRepository;
 import me.washcar.wcnc.domain.auth.dto.request.LoginDto;
 import me.washcar.wcnc.domain.auth.dto.request.SignupDto;
 import me.washcar.wcnc.domain.auth.dto.response.MemberMeDto;
+import me.washcar.wcnc.domain.auth.entity.SignupToken;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.dao.MemberRepository;
@@ -32,7 +34,6 @@ import me.washcar.wcnc.global.error.BusinessException;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AuthService {
 
 	private final AuthenticationManager authenticationManager;
@@ -40,6 +41,7 @@ public class AuthService {
 	private final SignupTokenRepository signupTokenRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final CookieService cookieService;
+	private final AligoService aligoService;
 
 	/**
 	 *	loginId 와 loginPassword 를 입력받아 인증 후 해당 id의 MemberMeDto 객체를 반환한다.
@@ -59,12 +61,14 @@ public class AuthService {
 		return this.getMemberMeByUuid(adapter.getUuid());
 	}
 
+	@Transactional(readOnly = true)
 	public void checkLoginId(String loginId) {
 		if (memberRepository.existsByLoginId(loginId)) {
 			throw new BusinessException(BusinessError.LOGIN_ID_DUPLICATED);
 		}
 	}
 
+	@Transactional
 	public void checkTelephone(String telephone) {
 		// 동일한 휴대폰 번호로 가입한 이력이 있는지 확인
 		if (memberRepository.existsByTelephone(telephone)) {
@@ -87,7 +91,8 @@ public class AuthService {
 		int randomInt = random.nextInt(1000000);
 		String token = String.format("%06d", randomInt);
 
-		// TODO 메시지로 토큰 보내기
+		String message = MessageFormatter.format("세차새차 인증번호 [{}]", token).getMessage();
+		aligoService.sendMessageSingle(message, telephone);
 
 		SignupToken signupToken = SignupToken.builder()
 			.telephone(telephone)
@@ -96,6 +101,7 @@ public class AuthService {
 		signupTokenRepository.save(signupToken);
 	}
 
+	@Transactional
 	public void signup(SignupDto signupDto) {
 
 		// 인증번호 유효한지 확인
@@ -134,6 +140,7 @@ public class AuthService {
 		}
 	}
 
+	@Transactional(readOnly = true)
 	public MemberMeDto getMemberMeByUuid(String uuid) {
 		Member member = memberRepository.findByUuid(uuid)
 			.orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));

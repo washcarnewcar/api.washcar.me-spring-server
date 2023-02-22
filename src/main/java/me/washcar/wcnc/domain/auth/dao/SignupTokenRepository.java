@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import me.washcar.wcnc.domain.auth.SignupToken;
+import me.washcar.wcnc.domain.auth.entity.SignupToken;
 
 public interface SignupTokenRepository extends JpaRepository<SignupToken, Long> {
 

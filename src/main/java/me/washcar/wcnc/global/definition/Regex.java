@@ -6,7 +6,7 @@ public class Regex {
 
 	public static final String PASSWORD = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[\\s\\S]{8,32}$";
 
-	public static final String TELEPHONE = "^01([016789])([0-9]{3,4})([0-9]{4})$";
+	public static final String TELEPHONE = "^010([0-9]{3,4})([0-9]{4})$";
 
 	public static final String TOKEN = "^\\d{6}$";
 

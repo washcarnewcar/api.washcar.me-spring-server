@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.1'
     id 'io.spring.dependency-management' version '1.1.0'
+    id "com.google.osdetector" version "1.7.3"
 }
 
 group = 'me.washcar'
@@ -31,6 +32,17 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.1'
+
+    // spring reactive web (To use WebClient)
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // Apple Silicon Mac에서는 io.netty.resolver를 찾지 못하는 에러 발생하여 Apple Silicon 용 라이브러리를 넣어줍니다.
+    if (osdetector.arch == "aarch_64") {
+        implementation 'io.netty:netty-resolver-dns-native-macos:4.1.89.Final:osx-aarch_64'
+    }
+
+    // spring configuration processor (To use ConfigurationProperties)
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     // JWT Libraries
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
