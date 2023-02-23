@@ -83,4 +83,18 @@ public class Member extends UuidEntity {
 		this.loginPassword = loginPassword;
 		this.telephone = telephone;
 	}
+
+	public void promote(MemberRole memberRole) {
+		if (this.memberRole.ordinal() < memberRole.ordinal()) {
+			this.memberRole = memberRole;
+		}
+	}
+
+	public void demote(MemberRole memberRole) {
+		if (this.memberRole.ordinal() > memberRole.ordinal()) {
+			this.memberRole = memberRole;
+		}
+	}
+
 }
+
