@@ -32,7 +32,7 @@ import me.washcar.wcnc.global.definition.RegexMessage;
 @RequiredArgsConstructor
 @Validated
 public class StoreController {
-	
+
 	private final StoreService storeService;
 
 	@PostMapping
@@ -40,7 +40,7 @@ public class StoreController {
 		@RequestBody @Valid StoreRequestDto storeRequestDto, @AuthenticationPrincipal String uuid) {
 		storeService.postStore(storeRequestDto, uuid);
 		return ResponseEntity
-			.status(HttpStatus.NO_CONTENT)
+			.status(HttpStatus.CREATED)
 			.build();
 	}
 
@@ -66,7 +66,7 @@ public class StoreController {
 		@PathVariable @Pattern(regexp = Regex.SLUG, message = RegexMessage.SLUG) String slug,
 		@RequestBody StoreRequestDto storeRequestDto) {
 		return ResponseEntity
-			.status(HttpStatus.OK)
+			.status(HttpStatus.CREATED)
 			.body(storeService.putStoreBySlug(slug, storeRequestDto));
 	}
 
@@ -86,7 +86,7 @@ public class StoreController {
 		StoreStatus storeStatus = storePatchRequestDto.getStoreStatus();
 		storeService.changeStoreStatusBySlug(slug, storeStatus);
 		return ResponseEntity
-			.status(HttpStatus.NO_CONTENT)
+			.status(HttpStatus.CREATED)
 			.build();
 	}
 

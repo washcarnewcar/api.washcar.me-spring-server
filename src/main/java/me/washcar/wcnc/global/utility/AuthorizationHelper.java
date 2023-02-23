@@ -26,6 +26,11 @@ public class AuthorizationHelper {
 		return role.equals(MemberRole.ROLE_SUPERMAN);
 	}
 
+	public String getMyUuid() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return authentication.getPrincipal().toString();
+	}
+
 	public MemberRole getMyRole() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();

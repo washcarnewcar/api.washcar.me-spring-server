@@ -1,7 +1,12 @@
 package me.washcar.wcnc.domain.store;
 
+import static me.washcar.wcnc.domain.member.MemberRole.*;
+
 import org.springframework.stereotype.Component;
 
+import me.washcar.wcnc.domain.member.MemberAuthenticationType;
+import me.washcar.wcnc.domain.member.MemberStatus;
+import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.domain.store.dto.request.StoreRequestDto;
 import me.washcar.wcnc.domain.store.entity.Location;
 import me.washcar.wcnc.domain.store.entity.Store;
@@ -9,9 +14,21 @@ import me.washcar.wcnc.domain.store.entity.Store;
 @Component
 public class StoreTestHelper {
 
+	private Member makeStaticOwner() {
+		return Member.builder()
+			.loginId("00WN")
+			.nickname("StaticOwner-00AA")
+			.memberRole(ROLE_OWNER)
+			.memberStatus(MemberStatus.ACTIVE)
+			.memberAuthenticationType(MemberAuthenticationType.PASSWORD)
+			.loginPassword("StaticOwner-PASSWORD")
+			.telephone("01020003000")
+			.build();
+	}
+
 	private Store makeStaticStore() {
 		Location location = new Location(30.001, 60.001, "ADD", "DETAIL", "WAY-TO");
-		return Store.builder()
+		Store store = Store.builder()
 			.slug("testslug")
 			.location(location)
 			.name("testName")
@@ -19,6 +36,8 @@ public class StoreTestHelper {
 			.description("testDescription")
 			.previewImage("https://testimage.net/storeImage")
 			.build();
+		store.assignOwner(makeStaticOwner());
+		return store;
 	}
 
 	public Store makeStaticPendingStore() {

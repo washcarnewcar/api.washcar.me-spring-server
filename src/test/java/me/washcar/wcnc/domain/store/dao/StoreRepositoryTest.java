@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import me.washcar.wcnc.domain.member.dao.MemberRepository;
 import me.washcar.wcnc.domain.store.StoreTestHelper;
 import me.washcar.wcnc.domain.store.entity.Store;
 
@@ -23,6 +24,9 @@ class StoreRepositoryTest {
 
 	@Autowired
 	private StoreRepository storeRepository;
+
+	@Autowired
+	private MemberRepository memberRepository;
 
 	@Autowired
 	private StoreTestHelper storeTestHelper;
@@ -36,6 +40,7 @@ class StoreRepositoryTest {
 		void should_success_when_singleStore() {
 			//given
 			Store store = storeTestHelper.makeStaticRunningStore();
+			memberRepository.save(store.getOwner());
 			storeRepository.save(store);
 			int page = 0;
 			int size = 10;
@@ -89,6 +94,7 @@ class StoreRepositoryTest {
 		void should_success_when_storeExist() {
 			//given
 			Store store = storeTestHelper.makeStaticRunningStore();
+			memberRepository.save(store.getOwner());
 			storeRepository.save(store);
 
 			//when

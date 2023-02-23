@@ -4,8 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +22,6 @@ import me.washcar.wcnc.global.utility.AuthorizationHelper;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class StoreService {
 
 	private final StoreRepository storeRepository;
@@ -53,21 +50,7 @@ public class StoreService {
 		}
 	}
 
-	private Store getStoreBySlugUnconditional(String slug) {
-		return storeRepository.findBySlug(slug)
-			.orElseThrow(() -> new BusinessException(BusinessError.STORE_NOT_FOUND));
-	}
-
-	public boolean amIOwner(Store store) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String uuid = authentication.getPrincipal().toString();
-		return uuid.equals(store.getOwner().getUuid());
-	}
-
-	public boolean isOwner(String uuid, Store store) {
-		return uuid.equals(store.getOwner().getUuid());
-	}
-
+	@Transactional
 	public void postStore(StoreRequestDto storeRequestDto, String ownerUuid) {
 		checkNewSlugSafety(storeRequestDto);
 		Store store = Store.builder()
@@ -93,9 +76,10 @@ public class StoreService {
 
 	@Transactional(readOnly = true)
 	public StoreDto getStoreBySlug(String slug) {
-		Store store = getStoreBySlugUnconditional(slug);
+		Store store = storeRepository.findBySlug(slug)
+			.orElseThrow(() -> new BusinessException(BusinessError.STORE_NOT_FOUND));
 		boolean isManager = authorizationHelper.isManager();
-		boolean isOwner = amIOwner(store);
+		boolean isOwner = store.isOwnedBy(authorizationHelper.getMyUuid());
 		boolean isOperate = store.getStatus().equals(StoreStatus.RUNNING);
 		if (isManager || isOwner || isOperate) {
 			return modelMapper.map(store, StoreDto.class);
@@ -104,10 +88,12 @@ public class StoreService {
 		}
 	}
 
+	@Transactional
 	public StoreDto putStoreBySlug(String slug, StoreRequestDto requestDto) {
-		Store store = getStoreBySlugUnconditional(slug);
+		Store store = storeRepository.findBySlug(slug)
+			.orElseThrow(() -> new BusinessException(BusinessError.STORE_NOT_FOUND));
 		boolean isManager = authorizationHelper.isManager();
-		boolean isOwner = amIOwner(store);
+		boolean isOwner = store.isOwnedBy(authorizationHelper.getMyUuid());
 		if (isManager || isOwner) {
 			checkChangeSlugSafety(slug, requestDto);
 			store.updateStore(requestDto.getSlug(), requestDto.getLocation(), requestDto.getName(),
@@ -119,13 +105,17 @@ public class StoreService {
 		}
 	}
 
+	@Transactional
 	public void deleteStoreBySlug(String slug) {
-		Store store = getStoreBySlugUnconditional(slug);
+		Store store = storeRepository.findBySlug(slug)
+			.orElseThrow(() -> new BusinessException(BusinessError.STORE_NOT_FOUND));
 		storeRepository.delete(store);
 	}
 
+	@Transactional
 	public void changeStoreStatusBySlug(String slug, StoreStatus storeStatus) {
-		Store store = getStoreBySlugUnconditional(slug);
+		Store store = storeRepository.findBySlug(slug)
+			.orElseThrow(() -> new BusinessException(BusinessError.STORE_NOT_FOUND));
 		store.updateStatus(storeStatus);
 		if (storeStatus.equals(StoreStatus.RUNNING)) {
 			store.getOwner().promote(MemberRole.ROLE_OWNER);

@@ -2,6 +2,7 @@ package me.washcar.wcnc.domain.store.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -69,6 +70,18 @@ public class Store extends BaseEntity {
 	@OneToMany(mappedBy = "store")
 	private final List<Reservation> reservations = new ArrayList<>();
 
+	@Builder
+	@SuppressWarnings("unused")
+	private Store(String slug, Location location, String name, String tel, String description,
+		String previewImage) {
+		this.status = StoreStatus.PENDING;
+		updateStore(slug, location, name, tel, description, previewImage);
+	}
+
+	public boolean isOwnedBy(String uuid) {
+		return Objects.equals(uuid, this.getOwner().getUuid());
+	}
+
 	public void addStoreImage(String imageUrl) {
 		StoreImage storeImage = StoreImage.builder()
 			.imageUrl(imageUrl)
@@ -81,14 +94,6 @@ public class Store extends BaseEntity {
 	public void assignOwner(Member owner) {
 		this.owner = owner;
 		owner.getStores().add(this);
-	}
-
-	@Builder
-	@SuppressWarnings("unused")
-	private Store(String slug, Location location, String name, String tel, String description,
-		String previewImage) {
-		this.status = StoreStatus.PENDING;
-		updateStore(slug, location, name, tel, description, previewImage);
 	}
 
 	public void updateStore(String slug, Location location, String name, String tel, String description,
