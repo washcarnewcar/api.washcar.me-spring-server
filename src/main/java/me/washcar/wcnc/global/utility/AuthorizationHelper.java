@@ -40,19 +40,11 @@ public class AuthorizationHelper {
 			throw new ApplicationException(ApplicationError.MULTIPLE_ROLE_FOUND);
 		} else {
 			String myRole = authorities.iterator().next().getAuthority();
-			if (myRole.equals(MemberRole.ROLE_USER.name())) {
-				return MemberRole.ROLE_USER;
+			try {
+				return MemberRole.valueOf(myRole);
+			} catch (IllegalArgumentException e) {
+				throw new ApplicationException(ApplicationError.ROLE_TYPE_ERROR);
 			}
-			if (myRole.equals(MemberRole.ROLE_OWNER.name())) {
-				return MemberRole.ROLE_OWNER;
-			}
-			if (myRole.equals(MemberRole.ROLE_ADMIN.name())) {
-				return MemberRole.ROLE_ADMIN;
-			}
-			if (myRole.equals(MemberRole.ROLE_SUPERMAN.name())) {
-				return MemberRole.ROLE_SUPERMAN;
-			}
-			throw new ApplicationException(ApplicationError.ROLE_TYPE_ERROR);
 		}
 	}
 
