@@ -1,18 +1,16 @@
 package me.washcar.wcnc.domain.aligo;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
-@Configuration
 @ConfigurationProperties(prefix = "aligo")
+@RequiredArgsConstructor
 @Getter
-@Setter
 public class AligoProperties {
-	private String userId;
-	private String sender;
-	private String apiKey;
-	private String testMode;
+	private final String userId;
+	private final String sender;
+	private final String apiKey;
+	private final String testMode;
 }
