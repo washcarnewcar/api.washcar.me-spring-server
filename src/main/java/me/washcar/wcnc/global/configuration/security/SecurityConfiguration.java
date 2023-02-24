@@ -73,16 +73,16 @@ public class SecurityConfiguration {
 			.requestMatchers("/v2/member")
 			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
 
-			.requestMatchers(HttpMethod.GET, "/v2/member/**")
+			.requestMatchers(HttpMethod.GET, "/v2/member/*")
 			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
 
-			.requestMatchers(HttpMethod.PUT, "/v2/member/**")
+			.requestMatchers(HttpMethod.PUT, "/v2/member/*")
 			.permitAll()
 
-			.requestMatchers(HttpMethod.DELETE, "/v2/member/**")
+			.requestMatchers(HttpMethod.DELETE, "/v2/member/*")
 			.hasAnyAuthority(ROLE_SUPERMAN.name())
 
-			.requestMatchers(HttpMethod.PATCH, "/v2/member/**")
+			.requestMatchers(HttpMethod.PATCH, "/v2/member/*")
 			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
 
 			// StoreController
@@ -92,17 +92,30 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.GET, "/v2/store")
 			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
 
-			.requestMatchers(HttpMethod.GET, "/v2/store/**")
+			.requestMatchers(HttpMethod.GET, "/v2/store/*")
 			.permitAll()
 
-			.requestMatchers(HttpMethod.PUT, "/v2/store/**")
+			.requestMatchers(HttpMethod.PUT, "/v2/store/*")
 			.hasAnyAuthority(ROLE_OWNER.name(), ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
 
-			.requestMatchers(HttpMethod.DELETE, "/v2/store/**")
+			.requestMatchers(HttpMethod.DELETE, "/v2/store/*")
 			.hasAnyAuthority(ROLE_SUPERMAN.name())
 
-			.requestMatchers(HttpMethod.PATCH, "/v2/store/**")
+			.requestMatchers(HttpMethod.PATCH, "/v2/store/*")
 			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
+
+			// StoreImageController
+			.requestMatchers(HttpMethod.POST, "/v2/store/*/image")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.GET, "/v2/store/*/image")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.GET, "/v2/image/*")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.DELETE, "/v2/image/*")
+			.permitAll()
 
 			// Any Request
 			.anyRequest()

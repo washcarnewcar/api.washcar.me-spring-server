@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.domain.reservation.entity.Reservation;
 import me.washcar.wcnc.domain.store.StoreStatus;
-import me.washcar.wcnc.domain.store.entity.image.StoreImage;
+import me.washcar.wcnc.domain.store.entity.image.entity.StoreImage;
 import me.washcar.wcnc.domain.store.entity.menu.StoreMenu;
 import me.washcar.wcnc.domain.store.entity.operation.StoreOperationHoliday;
 import me.washcar.wcnc.domain.store.entity.operation.StoreOperationHour;
@@ -32,8 +32,6 @@ import me.washcar.wcnc.global.entity.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(indexes = @Index(name = "slug_store_index", columnList = "slug"))
 public class Store extends BaseEntity {
-
-	public static final int MAX_IMAGE_NUMBER = 6;
 
 	@Column(nullable = false)
 	private StoreStatus status;
@@ -82,11 +80,7 @@ public class Store extends BaseEntity {
 		return Objects.equals(uuid, this.getOwner().getUuid());
 	}
 
-	public void addStoreImage(String imageUrl) {
-		StoreImage storeImage = StoreImage.builder()
-			.imageUrl(imageUrl)
-			.store(this)
-			.build();
+	public void addStoreImage(StoreImage storeImage) {
 		this.storeImages.add(storeImage);
 		storeImage.setStore(this);
 	}
