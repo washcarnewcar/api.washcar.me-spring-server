@@ -21,7 +21,7 @@ public class SignupDto {
 	@Pattern(regexp = Regex.TELEPHONE, message = RegexMessage.TELEPHONE)
 	private String telephone;
 
-	@Pattern(regexp = Regex.TOKEN, message = RegexMessage.TOKEN)
-	private String token;
+	@Pattern(regexp = Regex.PIN_NUMBER, message = RegexMessage.PIN_NUMBER)
+	private String pinNumber;
 
 }

@@ -8,7 +8,7 @@ public class RegexMessage {
 
 	public static final String TELEPHONE = "휴대폰 번호 형식에 맞지 않습니다.";
 
-	public static final String TOKEN = "인증번호 형식에 맞지 않습니다.";
+	public static final String PIN_NUMBER = "인증번호 형식에 맞지 않습니다.";
 
 	public static final String SLUG = "4~32자의 영문 대소문자, 숫자, - 만 사용 가능합니다.";
 

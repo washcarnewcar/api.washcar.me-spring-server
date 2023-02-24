@@ -13,12 +13,12 @@ import me.washcar.wcnc.global.entity.BaseEntity;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignupToken extends BaseEntity {
+public class SignupPinNumber extends BaseEntity {
 
 	@Column(nullable = false)
 	private String telephone;
 
 	@Column(nullable = false)
-	private String token;
+	private String pinNumber;
 
 }
