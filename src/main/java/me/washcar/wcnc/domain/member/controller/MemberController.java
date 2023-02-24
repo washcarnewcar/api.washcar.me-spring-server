@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.dto.request.MemberPatchRequestDto;
+import me.washcar.wcnc.domain.member.dto.request.MemberPutRequestDto;
 import me.washcar.wcnc.domain.member.dto.response.MemberDto;
 import me.washcar.wcnc.domain.member.service.MemberService;
 import me.washcar.wcnc.global.definition.Regex;
@@ -49,11 +51,13 @@ public class MemberController {
 	}
 
 	@PutMapping("/{uuid}")
-	public ResponseEntity<MemberDto> putMemberByUuid(
-		@PathVariable @Pattern(regexp = Regex.UUID_V4, message = RegexMessage.UUID_V4) String uuid) {
+	public ResponseEntity<Void> changeNicknameByUuid(
+		@PathVariable @Pattern(regexp = Regex.UUID_V4, message = RegexMessage.UUID_V4) String uuid,
+		@RequestBody @Valid MemberPutRequestDto memberPutRequestDto) {
+		memberService.changeNicknameByUuid(uuid, memberPutRequestDto);
 		return ResponseEntity
-			.status(HttpStatus.OK)
-			.body(memberService.putMemberByUuid(uuid));
+			.status(HttpStatus.NO_CONTENT)
+			.build();
 	}
 
 	@DeleteMapping("/{uuid}")

@@ -70,7 +70,19 @@ public class SecurityConfiguration {
 			.permitAll()
 
 			// MemberController
-			.requestMatchers("/v2/member/**")
+			.requestMatchers("/v2/member")
+			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
+
+			.requestMatchers(HttpMethod.GET, "/v2/member/**")
+			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
+
+			.requestMatchers(HttpMethod.PUT, "/v2/member/**")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.DELETE, "/v2/member/**")
+			.hasAnyAuthority(ROLE_SUPERMAN.name())
+
+			.requestMatchers(HttpMethod.PATCH, "/v2/member/**")
 			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
 
 			// StoreController
