@@ -20,8 +20,10 @@ public class JwtService {
 	@Value("${jwt.secret}")
 	@NonNull
 	private String SECRET;
+
 	@SuppressWarnings("FieldCanBeLocal")
 	private final int ACCESS_EXPIRE_MILLIS = 1000 * 60 * 60 * 2; // 2시간
+
 	@SuppressWarnings("FieldCanBeLocal")
 	private final int REFRESH_EXPIRE_MILLIS = 1000 * 60 * 60 * 5; // 5시간
 

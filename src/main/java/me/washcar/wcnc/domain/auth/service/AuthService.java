@@ -3,7 +3,9 @@ package me.washcar.wcnc.domain.auth.service;
 import static me.washcar.wcnc.domain.member.MemberRole.*;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
+import org.slf4j.helpers.MessageFormatter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -86,13 +88,18 @@ public class AuthService {
 			}
 		}
 
-		String pinNumber = aligoService.sendPinNumber(telephone);
+		Random random = new Random();
+		int randomInt = random.nextInt(1000000);
+		String pinNumber = String.format("%06d", randomInt);
 
 		SignupPinNumber signupPinNumber = SignupPinNumber.builder()
 			.telephone(telephone)
 			.pinNumber(pinNumber)
 			.build();
 		signupPinNumberRepository.save(signupPinNumber);
+
+		String message = MessageFormatter.format("세차새차 인증번호 [{}]", pinNumber).getMessage();
+		aligoService.sendMessageSingle(message, telephone);
 	}
 
 	@Transactional

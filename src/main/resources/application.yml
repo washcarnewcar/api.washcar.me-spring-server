@@ -9,11 +9,6 @@ spring:
           sharedCache:
             mode: ALL
 
-  datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-
   output:
     ansi:
       enabled: always
@@ -23,7 +18,7 @@ spring:
       client:
         registration:
           kakao:
-            client-id: ${KAKAO_CLIENT_ID}
+            client-id: ENC(pEyVx+9M8sqiyLnDm82ge0gLrnMV1lxEMY1E5mXUqWoa2+AUJenmMSIILgw+cSNiFRC+yMIbDaJDRlD9o7r6P5zmpqmVX5oJ1jgc8IHvqP4=)
             scope:
               - profile_nickname
               - phone_number
@@ -40,14 +35,20 @@ cookie:
   max-age: 7776000  # 60*60*24*90, 90일
 
 jwt:
-  secret: ${JWT_SECRET}
+  secret: ENC(ftp7Y0t0LaSUz0E4sWGPZIhNlqXlHJXJgHSb7Vu8thba4oK1kEwSJrj/EkwJIxLBxnV8UvevrWmESY3J88Se24QhxMbC5jGHTsZ69v/O8xSfGmExKQzg7z/VYb8WImd6)
 
 aligo:
-  user-id: shim
-  sender: ${ALIGO_SENDER}
-  api-key: ${ALIGO_API_KEY}
+  user-id: ENC(q0q/1hpvHy2LsbZvA5ku421qTycI3CDNMmPd3y5HGTLqvCpPJClvfgJJPScg6Zao)
+  sender: ENC(eBak4XLALQKJ3drZIO8/+3knEv7McARhHYDggMEXV+GbFaPtYinqr1sfkjVQAddy)
+  api-key: ENC(h9V1XOcfiocNT99/+VIATAhmg1ZR4RKz37eyMtm5lmMs8WQU9+6rBx8bBWSmATyDrmFkYJj6GAeyIRByWYXgMlxbxC+uyr5ELU2aTmwq9UM=)
 #  test-mode: Y  # 메시지를 전송하지 않고 에러가 나는지만 확인하려면 주석을 해제
 
+jasypt:
+  encryptor:
+    password: ${JASYPT_PASSWORD}
+
+# 모든 디버깅 로그 확인하려면 주석 해제
 #logging:
 #  level:
 #    root: debug
+
