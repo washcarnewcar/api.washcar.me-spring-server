@@ -70,6 +70,10 @@ public class Member extends UuidEntity {
 		this.memberStatus = status;
 	}
 
+	public void changeNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
 	@Builder
 	@SuppressWarnings("unused")
 	private Member(String loginId, MemberStatus memberStatus, MemberRole memberRole,
@@ -83,4 +87,18 @@ public class Member extends UuidEntity {
 		this.loginPassword = loginPassword;
 		this.telephone = telephone;
 	}
+
+	public void promote(MemberRole memberRole) {
+		if (this.memberRole.ordinal() < memberRole.ordinal()) {
+			this.memberRole = memberRole;
+		}
+	}
+
+	public void demote(MemberRole memberRole) {
+		if (this.memberRole.ordinal() > memberRole.ordinal()) {
+			this.memberRole = memberRole;
+		}
+	}
+
 }
+

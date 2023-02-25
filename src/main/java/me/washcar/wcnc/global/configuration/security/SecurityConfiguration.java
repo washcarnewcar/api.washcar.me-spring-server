@@ -4,6 +4,7 @@ import static me.washcar.wcnc.domain.member.MemberRole.*;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -69,7 +70,38 @@ public class SecurityConfiguration {
 			.permitAll()
 
 			// MemberController
-			.requestMatchers("/v2/member/**")
+			.requestMatchers("/v2/member")
+			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
+
+			.requestMatchers(HttpMethod.GET, "/v2/member/**")
+			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
+
+			.requestMatchers(HttpMethod.PUT, "/v2/member/**")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.DELETE, "/v2/member/**")
+			.hasAnyAuthority(ROLE_SUPERMAN.name())
+
+			.requestMatchers(HttpMethod.PATCH, "/v2/member/**")
+			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
+
+			// StoreController
+			.requestMatchers(HttpMethod.POST, "/v2/store")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.GET, "/v2/store")
+			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
+
+			.requestMatchers(HttpMethod.GET, "/v2/store/**")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.PUT, "/v2/store/**")
+			.hasAnyAuthority(ROLE_OWNER.name(), ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
+
+			.requestMatchers(HttpMethod.DELETE, "/v2/store/**")
+			.hasAnyAuthority(ROLE_SUPERMAN.name())
+
+			.requestMatchers(HttpMethod.PATCH, "/v2/store/**")
 			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
 
 			// Any Request
