@@ -1,4 +1,4 @@
-package me.washcar.wcnc.domain.auth;
+package me.washcar.wcnc.domain.auth.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,12 +13,12 @@ import me.washcar.wcnc.global.entity.BaseEntity;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignupToken extends BaseEntity {
+public class SignupPinNumber extends BaseEntity {
 
 	@Column(nullable = false)
 	private String telephone;
 
 	@Column(nullable = false)
-	private String token;
+	private String pinNumber;
 
 }
