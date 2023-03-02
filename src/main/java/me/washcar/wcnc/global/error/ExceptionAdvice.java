@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
+@Slf4j
 public class ExceptionAdvice {
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
@@ -65,6 +67,7 @@ public class ExceptionAdvice {
 	@ExceptionHandler(BusinessException.class)
 	public ErrorResponse businessExceptionHandler(BusinessException exception) {
 		BusinessError businessError = exception.getBusinessError();
+		log.info("{} : {}", businessError.name(), businessError.getMessage());
 		return ErrorResponse
 			.builder(exception, businessError.getHttpStatus(), businessError.getMessage())
 			.title(exception.getClass().getSimpleName())
@@ -73,9 +76,11 @@ public class ExceptionAdvice {
 
 	@ExceptionHandler(ApplicationException.class)
 	public ErrorResponse applicationExceptionHandler(ApplicationException exception) {
+		ApplicationError applicationError = exception.getApplicationError();
+		log.error("{} : {}", applicationError.name(), applicationError.getMessage(), exception);
 		// 추후에 개발자에게 알려주는 로직 추가 필요
 		return ErrorResponse
-			.builder(exception, HttpStatus.INTERNAL_SERVER_ERROR, exception.getApplicationError().getMessage())
+			.builder(exception, HttpStatus.INTERNAL_SERVER_ERROR, applicationError.getMessage())
 			.title(exception.getClass().getSimpleName())
 			.build();
 	}
