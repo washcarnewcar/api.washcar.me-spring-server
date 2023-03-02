@@ -18,29 +18,36 @@ spring:
       client:
         registration:
           kakao:
-            client-id: ENC(pEyVx+9M8sqiyLnDm82ge0gLrnMV1lxEMY1E5mXUqWoa2+AUJenmMSIILgw+cSNiFRC+yMIbDaJDRlD9o7r6P5zmpqmVX5oJ1jgc8IHvqP4=)
-            scope:
-              - profile_nickname
-              - phone_number
+            client-id: ENC(MwqgJCEZvLd09qmLEKACjqmpVcFTQPdCYRMOo4h7hRbAbMf28Ligudq0Be53p/+th5pwyH0tAfGqz/a0pCWOTnF+fHwUYojXl+A+y2wD5fI=)
+            client-secret: ENC(sBsq9JGrIBmWM8DQjPVMHoFPxJyewCmuFb0u9r3JS8wx/rljSY0AG7TVUxC2sgeoV1C/amCCm9hTor9uscX9llOjLaUuglocooNVWF47umE=)
             authorization-grant-type: authorization_code
-            client-authentication-method: POST
+            client-authentication-method: client_secret_post
+          naver:
+            client-id: ENC(QoPYA0N/TrDWg7C/5U7MFzblgyjscWEhzcAK+JmkYhO1lmovvAG2Jxl4vUCXFJulq38lH6y4kc8KvPVTZ2282Q==)
+            client-secret: ENC(V7Z5dxMvXtyKt1i4j20kXjHAATYqiy7PBKYSGc0En0fs2s6OKN6x++PBuVcPqt9o)
+            authorization-grant-type: authorization_code
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+          naver:
+            authorization_uri: https://nid.naver.com/oauth2.0/authorize
+            token_uri: https://nid.naver.com/oauth2.0/token
+            user-info-uri: https://openapi.naver.com/v1/nid/me
+            user_name_attribute: response
 
 cookie:
   max-age: 7776000  # 60*60*24*90, 90일
 
 jwt:
-  secret: ENC(ftp7Y0t0LaSUz0E4sWGPZIhNlqXlHJXJgHSb7Vu8thba4oK1kEwSJrj/EkwJIxLBxnV8UvevrWmESY3J88Se24QhxMbC5jGHTsZ69v/O8xSfGmExKQzg7z/VYb8WImd6)
+  secret: ENC(JVwhYMrePbdtTctule63uRffzJqwJTFM6Li5iGlVYgTO65+WJB8Mm7U8OuzGy5DjRpYF+VtsaLrLYLbwJFOrRfh0GGw9P+feKwdTYnRXu0EqSsOsy/+Lnda7JZ6pF5//J2uqnouu50qbO9mSz/k4nw==)
 
 aligo:
-  user-id: ENC(q0q/1hpvHy2LsbZvA5ku421qTycI3CDNMmPd3y5HGTLqvCpPJClvfgJJPScg6Zao)
-  sender: ENC(eBak4XLALQKJ3drZIO8/+3knEv7McARhHYDggMEXV+GbFaPtYinqr1sfkjVQAddy)
-  api-key: ENC(h9V1XOcfiocNT99/+VIATAhmg1ZR4RKz37eyMtm5lmMs8WQU9+6rBx8bBWSmATyDrmFkYJj6GAeyIRByWYXgMlxbxC+uyr5ELU2aTmwq9UM=)
+  user-id: ENC(k8jv+PN+JrjeTABq+4LBCjfZgJtTn5QoouIh9ijqzqD88fyvIFc6wIy7fnQvGacR)
+  sender: ENC(Uxrf/79EqQl/zihPKnpNcbm1/gpL7vD1dK1wIHx42FLXNWaIf/UPASThCv+RGkQI)
+  api-key: ENC(scZI8D+4/sqTYB6rDPNmWRAuvBM3Gvafk9SpcbXUPfrtn36mjKehMr6Afe/drug7991ZksvCNhiIaspzA1OwthJt6qxJTpt2iV69V962Hos=)
 #  test-mode: Y  # 메시지를 전송하지 않고 에러가 나는지만 확인하려면 주석을 해제
 
 jasypt:

@@ -13,26 +13,17 @@ import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.global.error.BusinessError;
 import me.washcar.wcnc.global.error.BusinessException;
 
-/**
- *  카카오 로그인으로 인증을 시도할 때 사용하는 클래스
- */
-public class KakaoAdapterImpl implements OAuth2Adapter {
+public class NaverAdapterImpl implements OAuth2Adapter {
 
 	/**
 	 * {
-	 *   "id" : 0000000000,
-	 *   "connected_at" : "2023-02-12T11:29:40Z",
-	 *   "properties" : {
-	 *     "nickname" : "****"
-	 *   },
-	 *   "kakao_account" : {
-	 *     "profile_nickname_needs_agreement" : false,
-	 *     "profile" : {
-	 *       "nickname" : "****"
-	 *     },
-	 *     "has_phone_number" : true,
-	 *     "phone_number_needs_agreement" : false,
-	 *     "phone_number" : "+82 10-1234-5678"
+	 *   "resultcode" : "00",
+	 *   "message" : "success",
+	 *   "response" : {
+	 *     "id" : "***********",
+	 *     "nickname" : "*******",
+	 *     "mobile" : "010-1234-5678",
+	 *     "mobile_e164" : "+821012345678"
 	 *   }
 	 * }
 	 */
@@ -44,27 +35,28 @@ public class KakaoAdapterImpl implements OAuth2Adapter {
 	private final String nickname;
 	private final String telephone;
 
-	public KakaoAdapterImpl(Map<String, Object> attributes) {
+	public NaverAdapterImpl(Map<String, Object> attributes) {
 		this.attributes = attributes;
 		@SuppressWarnings("unchecked")
-		Map<String, Object> kakaoAccount = (Map<String, Object>)attributes.get("kakao_account");
-		@SuppressWarnings("unchecked")
-		Map<String, Object> profile = (Map<String, Object>)kakaoAccount.get("profile");
-		this.providerId = attributes.get("id").toString();
-		this.nickname = profile.get("nickname").toString();
-		this.telephone = this.parseInternationalTelephone(kakaoAccount.get("phone_number").toString());
+		Map<String, Object> response = (Map<String, Object>)attributes.get("response");
+		this.providerId = response.get("id").toString();
+		this.nickname = response.get("nickname").toString();
+		this.telephone = this.parseInternationalTelephone(response.get("mobile_e164").toString());
 	}
 
 	@Override
-	public void setMemberField(Member member) {
-		this.uuid = member.getUuid();
-		this.memberRole = member.getMemberRole();
-		this.memberStatus = member.getMemberStatus();
+	public String getUuid() {
+		return this.uuid;
+	}
+
+	@Override
+	public MemberRole getMemberRole() {
+		return this.memberRole;
 	}
 
 	@Override
 	public String getProvider() {
-		return "kakao";
+		return "naver";
 	}
 
 	@Override
@@ -88,13 +80,10 @@ public class KakaoAdapterImpl implements OAuth2Adapter {
 	}
 
 	@Override
-	public String getUuid() {
-		return this.uuid;
-	}
-
-	@Override
-	public MemberRole getMemberRole() {
-		return this.memberRole;
+	public void setMemberField(Member member) {
+		this.uuid = member.getUuid();
+		this.memberRole = member.getMemberRole();
+		this.memberStatus = member.getMemberStatus();
 	}
 
 	@Override
@@ -118,6 +107,6 @@ public class KakaoAdapterImpl implements OAuth2Adapter {
 		}
 
 		// +82 자르고 - 제거한 뒤 0을 맨 앞에 붙힘
-		return "0".concat(internationalTelephone.substring(4).replaceAll("-", ""));
+		return "0".concat(internationalTelephone.substring(3));
 	}
 }

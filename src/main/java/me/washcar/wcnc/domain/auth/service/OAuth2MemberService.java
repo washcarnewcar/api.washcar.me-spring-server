@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.auth.adapter.KakaoAdapterImpl;
+import me.washcar.wcnc.domain.auth.adapter.NaverAdapterImpl;
 import me.washcar.wcnc.domain.auth.adapter.OAuth2Adapter;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberRole;
@@ -34,13 +35,12 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
 
 		String provider = userRequest.getClientRegistration().getRegistrationId();    // google, kakao, ...
 
-		OAuth2Adapter oAuth2Adapter;
-		if (provider.equals("kakao")) {
-			oAuth2Adapter = new KakaoAdapterImpl(oAuth2User.getAttributes());
-		} else {
-			throw new OAuth2AuthenticationException(
+		OAuth2Adapter oAuth2Adapter = switch (provider) {
+			case "kakao" -> new KakaoAdapterImpl(oAuth2User.getAttributes());
+			case "naver" -> new NaverAdapterImpl(oAuth2User.getAttributes());
+			default -> throw new OAuth2AuthenticationException(
 				new OAuth2Error(BusinessError.OAUTH_NOT_SUPPORTED_PROVIDER.getMessage()));
-		}
+		};
 
 		// 회원가입이 되어있는지 확인
 		OAuth oAuth = oAuthRepository.findByProviderAndProviderId(oAuth2Adapter.getProvider(),
