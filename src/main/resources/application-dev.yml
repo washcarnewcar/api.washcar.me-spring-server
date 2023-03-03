@@ -8,9 +8,9 @@ spring:
         '[format_sql]': true
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: jdbc:mysql://localhost:3306/wcnc
+    username: root
+    password: 12345678
 
   security:
     oauth2:
@@ -18,6 +18,8 @@ spring:
         registration:
           kakao:
             redirect-uri: http://localhost/v2/oauth2/code/kakao
+          naver:
+            redirect-uri: http://localhost/v2/oauth2/code/naver
 
 front-server:
   domain: http://localhost:3000

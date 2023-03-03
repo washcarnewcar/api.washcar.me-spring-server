@@ -11,7 +11,7 @@ spring:
     # AWS RDS 값 인코딩해서 넣을 것
     url:
     username:
-    password:
+    password: ENC(N0e5gyuFwpblqQOzbJtC+9dA3iQGMoIQ6LG7EntaIkMaDbh9txHuk01CBo+kdednZSxD6Xy5y3tA+sDqWwAHCA8Lg/rGguPgQh5+MaUPVZIJyVnpAtTuOVYyFxjbskl4vGESpCu+ombzYNlMWm61RQ==)
 
   security:
     oauth2:
@@ -19,6 +19,8 @@ spring:
         registration:
           kakao:
             redirect-uri: https://api.washcar.me/v2/oauth2/code/kakao
+          naver:
+            redirect-uri: https://api.washcar.me/v2/oauth2/code/naver
 
 front-server:
   domain: https://www.washcar.me
