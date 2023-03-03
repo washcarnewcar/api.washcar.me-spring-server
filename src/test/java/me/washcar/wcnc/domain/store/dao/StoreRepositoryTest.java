@@ -41,6 +41,7 @@ class StoreRepositoryTest {
 			//given
 			Store store = storeTestHelper.makeStaticRunningStore();
 			memberRepository.save(store.getOwner());
+			storeRepository.deleteAll();
 			storeRepository.save(store);
 			int page = 0;
 			int size = 10;
@@ -67,6 +68,7 @@ class StoreRepositoryTest {
 		@DisplayName("세차장이 없는 경우에도 세차장 조회에 성공한다")
 		void should_success_when_zeroStore() {
 			//given
+			storeRepository.deleteAll();
 			int page = 0;
 			int size = 5;
 

@@ -15,9 +15,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.domain.member.MemberStatus;
 import me.washcar.wcnc.domain.member.MemberTestHelper;
+import me.washcar.wcnc.domain.member.entity.Member;
 
 @SpringBootTest
 @Transactional
@@ -38,6 +38,7 @@ class MemberRepositoryTest {
 		void should_success_when_singleMember() {
 			//given
 			Member member = memberTestHelper.makeStaticMember();
+			memberRepository.deleteAll();
 			memberRepository.save(member);
 			int page = 0;
 			int size = 12;
@@ -64,6 +65,7 @@ class MemberRepositoryTest {
 		@DisplayName("멤버가 없는 경우에도 멤버 조회에 성공한다")
 		void should_success_when_zeroMember() {
 			//given
+			memberRepository.deleteAll();
 			int page = 0;
 			int size = 5;
 
