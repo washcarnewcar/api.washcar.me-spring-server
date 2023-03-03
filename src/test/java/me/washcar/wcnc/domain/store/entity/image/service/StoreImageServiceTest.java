@@ -68,7 +68,7 @@ class StoreImageServiceTest {
 			given(storeRepository.findBySlug(anyString())).willReturn(Optional.empty());
 
 			//when & then
-			assertThatThrownBy(() -> storeImageService.postImageBySlug("badStoreSlug", imageRequestDto))
+			assertThatThrownBy(() -> storeImageService.create("badStoreSlug", imageRequestDto.getImageUrl()))
 				.isInstanceOf(BusinessException.class);
 		}
 
@@ -82,9 +82,9 @@ class StoreImageServiceTest {
 
 			//when & then
 			for (int i = 0; i < 6; i++) {
-				storeImageService.postImageBySlug(store.getSlug(), imageRequestDto);
+				storeImageService.create(store.getSlug(), imageRequestDto.getImageUrl());
 			}
-			assertThatThrownBy(() -> storeImageService.postImageBySlug(store.getSlug(), imageRequestDto))
+			assertThatThrownBy(() -> storeImageService.create(store.getSlug(), imageRequestDto.getImageUrl()))
 				.isInstanceOf(BusinessException.class);
 		}
 

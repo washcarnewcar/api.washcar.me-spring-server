@@ -2,7 +2,6 @@ package me.washcar.wcnc.domain.store.entity.image.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,16 +23,15 @@ import me.washcar.wcnc.global.definition.RegexMessage;
 @RestController
 @RequestMapping("/v2")
 @RequiredArgsConstructor
-@Validated
 public class StoreImageController {
 
 	private final StoreImageService storeImageService;
 
 	@PostMapping("/store/{slug}/image")
-	public ResponseEntity<Void> postImageBySlug(
+	public ResponseEntity<Void> create(
 		@PathVariable @Pattern(regexp = Regex.SLUG, message = RegexMessage.SLUG) String slug, @RequestBody @Valid
 	ImageRequestDto requestDto) {
-		storeImageService.postImageBySlug(slug, requestDto);
+		storeImageService.create(slug, requestDto.getImageUrl());
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.build();

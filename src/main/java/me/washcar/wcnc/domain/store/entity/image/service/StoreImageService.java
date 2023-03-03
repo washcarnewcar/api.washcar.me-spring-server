@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.store.dao.StoreRepository;
 import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.domain.store.entity.image.dao.StoreImageRepository;
-import me.washcar.wcnc.domain.store.entity.image.dto.request.ImageRequestDto;
 import me.washcar.wcnc.domain.store.entity.image.dto.response.ImageResponseDto;
 import me.washcar.wcnc.domain.store.entity.image.dto.response.ImagesDto;
 import me.washcar.wcnc.domain.store.entity.image.entity.StoreImage;
@@ -33,23 +32,21 @@ public class StoreImageService {
 	private final ModelMapper modelMapper;
 
 	@Transactional
-	public void postImageBySlug(String slug, ImageRequestDto requestDto) {
+	public void create(String slug, String imageUrl) {
 		Store store = storeRepository.findBySlug(slug).orElseThrow(() -> new BusinessException(
 			BusinessError.STORE_NOT_FOUND));
 		boolean isManager = authorizationHelper.isManager();
 		boolean isOwner = store.isOwnedBy(authorizationHelper.getMyUuid());
-		if (isManager || isOwner) {
-			if (store.getStoreImages().size() >= MAX_IMAGE_NUMBER) {
-				throw new BusinessException(BusinessError.EXCEED_STORE_IMAGE_LIMIT);
-			}
-			StoreImage storeImage = StoreImage.builder()
-				.imageUrl(requestDto.getImageUrl())
-				.build();
-			storeImageRepository.save(storeImage);
-			store.addStoreImage(storeImage);
-		} else {
+		if (!isManager && !isOwner) {
 			throw new BusinessException(BusinessError.FORBIDDEN_STORE_CHANGE);
 		}
+		if (store.getStoreImages().size() >= MAX_IMAGE_NUMBER) {
+			throw new BusinessException(BusinessError.EXCEED_STORE_IMAGE_LIMIT);
+		}
+		StoreImage storeImage = StoreImage.builder()
+			.imageUrl(imageUrl)
+			.build();
+		store.addStoreImage(storeImage);
 	}
 
 	@Transactional(readOnly = true)
@@ -80,11 +77,10 @@ public class StoreImageService {
 		Store store = storeImage.getStore();
 		boolean isManager = authorizationHelper.isManager();
 		boolean isOwner = store.isOwnedBy(authorizationHelper.getMyUuid());
-		if (isManager || isOwner) {
-			store.getStoreImages().remove(storeImage);
-		} else {
+		if (!isManager && !isOwner) {
 			throw new BusinessException(BusinessError.FORBIDDEN_STORE_CHANGE);
 		}
+		store.deleteStoreImage(storeImage);
 	}
-	
+
 }

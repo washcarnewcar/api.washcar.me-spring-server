@@ -85,6 +85,10 @@ public class Store extends BaseEntity {
 		storeImage.setStore(this);
 	}
 
+	public void deleteStoreImage(StoreImage storeImage) {
+		this.storeImages.remove(storeImage);
+	}
+
 	public void assignOwner(Member owner) {
 		this.owner = owner;
 		owner.getStores().add(this);
