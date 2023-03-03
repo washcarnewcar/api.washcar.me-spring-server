@@ -23,6 +23,7 @@ public enum BusinessError {
 	EXCEED_STORE_IMAGE_LIMIT(HttpStatus.CONFLICT, "이미지 최대 등록 가능 횟수를 초과했습니다."),
 	FORBIDDEN_STORE_CHANGE(HttpStatus.FORBIDDEN, "해당 세차장의 정보 수정을 할 권한이 없습니다."),
 	FORBIDDEN_MEMBER_CHANGE(HttpStatus.FORBIDDEN, "해당 멤버의 정보 수정을 할 권한이 없습니다."),
+	STORE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "세차장 이미지를 찾을 수 없습니다."),
 	;
 
 	private final HttpStatus httpStatus;

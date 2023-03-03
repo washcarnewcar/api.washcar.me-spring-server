@@ -1,4 +1,4 @@
-package me.washcar.wcnc.domain.store.entity.image;
+package me.washcar.wcnc.domain.store.entity.image.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +31,6 @@ public class StoreImage extends UuidEntity {
 	@SuppressWarnings("unused")
 	private StoreImage(String imageUrl, Store store) {
 		this.imageUrl = imageUrl;
-		this.store = store;
 	}
 
 }
