@@ -50,6 +50,14 @@ public class StoreService {
 		}
 	}
 
+	public void checkStoreChangePermit(Store store) {
+		boolean isManager = authorizationHelper.isManager();
+		boolean isOwner = store.isOwnedBy(authorizationHelper.getMyUuid());
+		if (!isManager && !isOwner) {
+			throw new BusinessException(BusinessError.FORBIDDEN_STORE_CHANGE);
+		}
+	}
+
 	@Transactional
 	public void postStore(StoreRequestDto storeRequestDto, String ownerUuid) {
 		checkNewSlugSafety(storeRequestDto);
@@ -92,17 +100,12 @@ public class StoreService {
 	public StoreDto putStoreBySlug(String slug, StoreRequestDto requestDto) {
 		Store store = storeRepository.findBySlug(slug)
 			.orElseThrow(() -> new BusinessException(BusinessError.STORE_NOT_FOUND));
-		boolean isManager = authorizationHelper.isManager();
-		boolean isOwner = store.isOwnedBy(authorizationHelper.getMyUuid());
-		if (isManager || isOwner) {
-			checkChangeSlugSafety(slug, requestDto);
-			store.updateStore(requestDto.getSlug(), requestDto.getLocation(), requestDto.getName(),
-				requestDto.getTel(), requestDto.getDescription(), requestDto.getPreviewImage());
-			refreshStoreStatus(store);
-			return modelMapper.map(store, StoreDto.class);
-		} else {
-			throw new BusinessException(BusinessError.FORBIDDEN_STORE_CHANGE);
-		}
+		checkStoreChangePermit(store);
+		checkChangeSlugSafety(slug, requestDto);
+		store.updateStore(requestDto.getSlug(), requestDto.getLocation(), requestDto.getName(),
+			requestDto.getTel(), requestDto.getDescription(), requestDto.getPreviewImage());
+		refreshStoreStatus(store);
+		return modelMapper.map(store, StoreDto.class);
 	}
 
 	@Transactional

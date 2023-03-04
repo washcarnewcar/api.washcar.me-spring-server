@@ -117,6 +117,22 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.DELETE, "/v2/image/*")
 			.permitAll()
 
+			// StoreMenuController
+			.requestMatchers(HttpMethod.POST, "/v2/store/*/menu")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.GET, "/v2/store/*/menu")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.GET, "/v2/menu/*")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.PUT, "/v2/menu/*")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.DELETE, "/v2/menu/*")
+			.permitAll()
+
 			// Any Request
 			.anyRequest()
 			.permitAll();
