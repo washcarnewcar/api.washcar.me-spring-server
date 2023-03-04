@@ -117,6 +117,10 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.DELETE, "/v2/image/*")
 			.permitAll()
 
+			// SearchSlugController
+			.requestMatchers(HttpMethod.GET, "/v2/search/slugs/me")
+			.permitAll()
+
 			// Any Request
 			.anyRequest()
 			.permitAll();
