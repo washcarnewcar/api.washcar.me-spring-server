@@ -23,20 +23,20 @@ import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.domain.store.entity.image.StoreImageTestHelper;
 import me.washcar.wcnc.domain.store.entity.image.dao.StoreImageRepository;
 import me.washcar.wcnc.domain.store.entity.image.dto.request.ImageRequestDto;
+import me.washcar.wcnc.domain.store.service.StoreService;
 import me.washcar.wcnc.global.error.BusinessException;
-import me.washcar.wcnc.global.utility.AuthorizationHelper;
 
 @ExtendWith(MockitoExtension.class)
 class StoreImageServiceTest {
+
+	@Mock
+	private StoreService storeService;
 
 	@Mock
 	private StoreRepository storeRepository;
 
 	@Mock
 	private StoreImageRepository storeImageRepository;
-
-	@Mock
-	private AuthorizationHelper authorizationHelper;
 
 	private static StoreTestHelper storeTestHelper;
 
@@ -52,7 +52,7 @@ class StoreImageServiceTest {
 
 	@BeforeEach
 	void beforeEach() {
-		storeImageService = new StoreImageService(storeRepository, storeImageRepository, authorizationHelper,
+		storeImageService = new StoreImageService(storeService, storeRepository, storeImageRepository,
 			new ModelMapper());
 	}
 

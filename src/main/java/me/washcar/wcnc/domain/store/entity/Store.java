@@ -22,7 +22,7 @@ import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.domain.reservation.entity.Reservation;
 import me.washcar.wcnc.domain.store.StoreStatus;
 import me.washcar.wcnc.domain.store.entity.image.entity.StoreImage;
-import me.washcar.wcnc.domain.store.entity.menu.StoreMenu;
+import me.washcar.wcnc.domain.store.entity.menu.entity.StoreMenu;
 import me.washcar.wcnc.domain.store.entity.operation.StoreOperationHoliday;
 import me.washcar.wcnc.domain.store.entity.operation.StoreOperationHour;
 import me.washcar.wcnc.global.entity.BaseEntity;
@@ -87,6 +87,15 @@ public class Store extends BaseEntity {
 
 	public void deleteStoreImage(StoreImage storeImage) {
 		this.storeImages.remove(storeImage);
+	}
+
+	public void addStoreMenu(StoreMenu storeMenu) {
+		this.storeMenus.add(storeMenu);
+		storeMenu.setStore(this);
+	}
+
+	public void deleteStoreMenu(StoreMenu storeMenu) {
+		this.storeMenus.remove(storeMenu);
 	}
 
 	public void assignOwner(Member owner) {

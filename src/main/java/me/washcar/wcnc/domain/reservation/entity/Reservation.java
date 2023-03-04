@@ -13,7 +13,7 @@ import me.washcar.wcnc.domain.car.model.entity.Model;
 import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.domain.reservation.ReservationStatus;
 import me.washcar.wcnc.domain.store.entity.Store;
-import me.washcar.wcnc.domain.store.entity.menu.StoreMenu;
+import me.washcar.wcnc.domain.store.entity.menu.entity.StoreMenu;
 import me.washcar.wcnc.global.entity.UuidEntity;
 
 @Entity
