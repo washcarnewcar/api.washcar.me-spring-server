@@ -9,10 +9,10 @@ import lombok.Getter;
 public class MenuRequestDto {
 
 	@NotBlank
-	private int price;
+	private Integer price;
 
 	@NotBlank
-	private int expectedMinute;
+	private Integer expectedMinute;
 
 	private String description;
 

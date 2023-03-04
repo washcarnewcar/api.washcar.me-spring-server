@@ -26,10 +26,10 @@ import me.washcar.wcnc.global.entity.UuidEntity;
 public class StoreMenu extends UuidEntity {
 
 	@Column(nullable = false)
-	private int price;
+	private Integer price;
 
 	@Column(nullable = false)
-	private int expectedMinute;
+	private Integer expectedMinute;
 
 	private String description;
 
@@ -42,7 +42,7 @@ public class StoreMenu extends UuidEntity {
 	@OneToMany(mappedBy = "storeMenu")
 	private final Collection<Reservation> reservations = new ArrayList<>();
 
-	public void updateMenu(int price, int expectedMinute, String description, String image) {
+	public void updateMenu(Integer price, Integer expectedMinute, String description, String image) {
 		this.price = price;
 		this.expectedMinute = expectedMinute;
 		this.description = description;
@@ -51,7 +51,7 @@ public class StoreMenu extends UuidEntity {
 
 	@Builder
 	@SuppressWarnings("unused")
-	public StoreMenu(int price, int expectedMinute, String description, String image) {
+	public StoreMenu(Integer price, Integer expectedMinute, String description, String image) {
 		this.price = price;
 		this.expectedMinute = expectedMinute;
 		this.description = description;

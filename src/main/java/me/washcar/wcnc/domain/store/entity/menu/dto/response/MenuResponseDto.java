@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 public class MenuResponseDto {
 
-	private int price;
+	private Integer price;
 
-	private int expectedMinute;
+	private Integer expectedMinute;
 
 	private String description;
 
