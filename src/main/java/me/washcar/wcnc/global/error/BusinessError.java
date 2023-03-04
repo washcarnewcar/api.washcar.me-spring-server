@@ -21,9 +21,11 @@ public enum BusinessError {
 	STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "세차장을 찾을 수 없습니다."),
 	STORE_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 해당 SLUG를 가진 세차장이 존재합니다."),
 	EXCEED_STORE_IMAGE_LIMIT(HttpStatus.CONFLICT, "이미지 최대 등록 가능 횟수를 초과했습니다."),
+	EXCEED_STORE_MENU_LIMIT(HttpStatus.CONFLICT, "메뉴 최대 등록 가능 횟수를 초과했습니다."),
 	FORBIDDEN_STORE_CHANGE(HttpStatus.FORBIDDEN, "해당 세차장의 정보 수정을 할 권한이 없습니다."),
 	FORBIDDEN_MEMBER_CHANGE(HttpStatus.FORBIDDEN, "해당 멤버의 정보 수정을 할 권한이 없습니다."),
 	STORE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "세차장 이미지를 찾을 수 없습니다."),
+	STORE_MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "세차장 메뉴를 찾을 수 없습니다."),
 	;
 
 	private final HttpStatus httpStatus;
