@@ -23,7 +23,6 @@ import me.washcar.wcnc.domain.auth.dao.SignupPinNumberRepository;
 import me.washcar.wcnc.domain.auth.dto.request.LoginDto;
 import me.washcar.wcnc.domain.auth.dto.request.SignupDto;
 import me.washcar.wcnc.domain.auth.dto.response.MemberMeDto;
-import me.washcar.wcnc.domain.auth.dto.response.MemberMeReLoginNeededDto;
 import me.washcar.wcnc.domain.auth.entity.SignupPinNumber;
 import me.washcar.wcnc.domain.member.MemberAuthenticationType;
 import me.washcar.wcnc.domain.member.MemberStatus;
@@ -59,13 +58,10 @@ public class AuthService {
 			new UsernamePasswordAuthenticationToken(loginId, loginPassword));
 
 		AuthenticationAdapter adapter = (AuthenticationAdapter)authentication.getPrincipal();
-
 		cookieService.authenticate(adapter.getUuid(), adapter.getMemberRole(), response);
-
 		Member member = memberRepository.findByUuid(adapter.getUuid())
 			.orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
-
-		return new MemberMeDto(member);
+		return MemberMeDto.from(member, false);
 	}
 
 	@Transactional(readOnly = true)
@@ -154,8 +150,8 @@ public class AuthService {
 			.orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
 		// 전달받은 JWT속 ROLE과 DB속 ROLE이 다른 경우
 		if (!Objects.equals(authorizationHelper.getMyRole(), member.getMemberRole())) {
-			return new MemberMeReLoginNeededDto(member);
+			return MemberMeDto.from(member, true);
 		}
-		return new MemberMeDto(member);
+		return MemberMeDto.from(member, false);
 	}
 }

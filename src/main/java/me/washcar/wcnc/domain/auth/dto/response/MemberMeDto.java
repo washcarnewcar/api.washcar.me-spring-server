@@ -9,19 +9,27 @@ import me.washcar.wcnc.domain.member.entity.Member;
 @Getter
 @NoArgsConstructor
 public class MemberMeDto {
+
 	private String nickname;
+
 	private MemberRole memberRole;
+
+	private boolean isRefreshRequired;
 
 	@Builder
 	@SuppressWarnings("unused")
-	private MemberMeDto(String nickname, MemberRole memberRole) {
+	private MemberMeDto(String nickname, MemberRole memberRole, boolean isRefreshRequired) {
 		this.nickname = nickname;
 		this.memberRole = memberRole;
+		this.isRefreshRequired = isRefreshRequired;
 	}
 
-	public MemberMeDto(Member member) {
-		this.nickname = member.getNickname();
-		this.memberRole = member.getMemberRole();
+	public static MemberMeDto from(Member member, boolean isRefreshRequired) {
+		return MemberMeDto.builder()
+			.nickname(member.getNickname())
+			.memberRole(member.getMemberRole())
+			.isRefreshRequired(isRefreshRequired)
+			.build();
 	}
 
 }
