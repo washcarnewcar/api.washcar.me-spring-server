@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.auth.dto.request.LoginDto;
 import me.washcar.wcnc.domain.auth.dto.request.SignupDto;
 import me.washcar.wcnc.domain.auth.dto.response.MemberMeDto;
+import me.washcar.wcnc.domain.auth.dto.response.MemberMeReLoginNeededDto;
 import me.washcar.wcnc.domain.auth.service.AuthService;
 import me.washcar.wcnc.domain.auth.service.CookieService;
 import me.washcar.wcnc.global.definition.Regex;
@@ -75,9 +76,16 @@ public class AuthController {
 
 	@GetMapping("/members/me")
 	public ResponseEntity<MemberMeDto> getMemberByJwt(@AuthenticationPrincipal String uuid) {
-		return ResponseEntity
-			.status(HttpStatus.OK)
-			.body(authService.getMemberMeByUuid(uuid));
+		MemberMeDto dto = authService.getMemberMeByUuid(uuid);
+		if (dto instanceof MemberMeReLoginNeededDto) {
+			return ResponseEntity
+				.status(HttpStatus.RESET_CONTENT)
+				.body(dto);
+		} else {
+			return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(dto);
+		}
 	}
 
 	@PostMapping("/pin")
