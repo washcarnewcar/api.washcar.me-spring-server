@@ -13,6 +13,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,8 +24,8 @@ import me.washcar.wcnc.domain.reservation.entity.Reservation;
 import me.washcar.wcnc.domain.store.StoreStatus;
 import me.washcar.wcnc.domain.store.entity.image.entity.StoreImage;
 import me.washcar.wcnc.domain.store.entity.menu.entity.StoreMenu;
-import me.washcar.wcnc.domain.store.entity.operation.StoreOperationHoliday;
-import me.washcar.wcnc.domain.store.entity.operation.StoreOperationHour;
+import me.washcar.wcnc.domain.store.entity.operation.entity.StoreOperationHoliday;
+import me.washcar.wcnc.domain.store.entity.operation.entity.StoreOperationHour;
 import me.washcar.wcnc.global.entity.BaseEntity;
 
 @Entity
@@ -67,6 +68,11 @@ public class Store extends BaseEntity {
 
 	@OneToMany(mappedBy = "store")
 	private final List<Reservation> reservations = new ArrayList<>();
+
+	@PrePersist
+	private void onCreate() {
+		this.storeOperationHour = new StoreOperationHour();
+	}
 
 	@Builder
 	@SuppressWarnings("unused")

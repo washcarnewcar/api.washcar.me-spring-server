@@ -1,4 +1,4 @@
-package me.washcar.wcnc.domain.store.entity.operation;
+package me.washcar.wcnc.domain.store.entity.operation.entity;
 
 import java.time.LocalDateTime;
 
