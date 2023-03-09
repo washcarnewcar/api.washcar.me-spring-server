@@ -46,7 +46,7 @@ class StoreServiceTest {
 
 	private static StoreTestHelper storeTestHelper;
 
-	private static StoreService storeService;
+	private StoreService storeService;
 
 	@BeforeAll
 	static void beforeAll() {

@@ -42,7 +42,7 @@ class StoreImageServiceTest {
 
 	private static StoreImageTestHelper storeImageTestHelper;
 
-	private static StoreImageService storeImageService;
+	private StoreImageService storeImageService;
 
 	@BeforeAll
 	static void beforeAll() {
