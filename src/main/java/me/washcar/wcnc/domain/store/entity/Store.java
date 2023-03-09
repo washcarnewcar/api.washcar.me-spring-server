@@ -23,8 +23,8 @@ import me.washcar.wcnc.domain.reservation.entity.Reservation;
 import me.washcar.wcnc.domain.store.StoreStatus;
 import me.washcar.wcnc.domain.store.entity.image.entity.StoreImage;
 import me.washcar.wcnc.domain.store.entity.menu.entity.StoreMenu;
-import me.washcar.wcnc.domain.store.entity.operation.StoreOperationHoliday;
-import me.washcar.wcnc.domain.store.entity.operation.StoreOperationHour;
+import me.washcar.wcnc.domain.store.entity.operation.entity.StoreOperationHoliday;
+import me.washcar.wcnc.domain.store.entity.operation.entity.StoreOperationHour;
 import me.washcar.wcnc.global.entity.BaseEntity;
 
 @Entity
@@ -54,7 +54,8 @@ public class Store extends BaseEntity {
 	private Member owner;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private StoreOperationHour storeOperationHour;
+	@SuppressWarnings("FieldMayBeFinal")
+	private StoreOperationHour storeOperationHour = new StoreOperationHour();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")
 	private final List<StoreImage> storeImages = new ArrayList<>();
