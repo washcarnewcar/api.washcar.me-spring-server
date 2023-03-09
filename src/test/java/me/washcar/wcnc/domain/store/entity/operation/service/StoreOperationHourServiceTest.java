@@ -155,5 +155,39 @@ class StoreOperationHourServiceTest {
 			assertThat(operationHour.getSaturdayEndTime()).isNotEqualTo(requestDto.getSaturdayEndTime());
 		}
 
+		@Test
+		@DisplayName("운영 시작 시간이 운영 마감 시간 이후로 설정된 요청의 경우 세차장 운영시간 변경에 실패한다")
+		void should_failToPutStoreOperationHour_when_startTimeIsAfterEndTime() {
+			//given
+			OperationHourRequestDto requestDto = storeOperationHourTestHelper.makeBadOperationHourRequestDto();
+			Store store = storeTestHelper.makeStaticRunningStore();
+			given(storeRepository.findBySlug(anyString())).willReturn(Optional.of(store));
+
+			//when & then
+			assertThatThrownBy(
+				() -> storeOperationHourService.putOperationHourBySlug("goodSlug", requestDto)).isInstanceOf(
+				BusinessException.class);
+
+			StoreOperationHour operationHour = store.getStoreOperationHour();
+			LocalTime defaultBeginningTime = LocalTime.of(9, 0, 0);
+			LocalTime defaultEndTime = LocalTime.of(18, 0, 0);
+
+			assertThat(operationHour.getSundayStartTime()).isEqualTo(defaultBeginningTime);
+			assertThat(operationHour.getMondayStartTime()).isEqualTo(defaultBeginningTime);
+			assertThat(operationHour.getTuesdayStartTime()).isEqualTo(defaultBeginningTime);
+			assertThat(operationHour.getWednesdayStartTime()).isEqualTo(defaultBeginningTime);
+			assertThat(operationHour.getThursdayStartTime()).isEqualTo(defaultBeginningTime);
+			assertThat(operationHour.getFridayStartTime()).isEqualTo(defaultBeginningTime);
+			assertThat(operationHour.getSaturdayStartTime()).isEqualTo(defaultBeginningTime);
+
+			assertThat(operationHour.getSundayEndTime()).isEqualTo(defaultEndTime);
+			assertThat(operationHour.getMondayEndTime()).isEqualTo(defaultEndTime);
+			assertThat(operationHour.getTuesdayEndTime()).isEqualTo(defaultEndTime);
+			assertThat(operationHour.getWednesdayEndTime()).isEqualTo(defaultEndTime);
+			assertThat(operationHour.getThursdayEndTime()).isEqualTo(defaultEndTime);
+			assertThat(operationHour.getFridayEndTime()).isEqualTo(defaultEndTime);
+			assertThat(operationHour.getSaturdayEndTime()).isEqualTo(defaultEndTime);
+		}
+
 	}
 }

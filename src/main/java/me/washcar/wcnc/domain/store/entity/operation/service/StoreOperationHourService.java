@@ -32,6 +32,16 @@ public class StoreOperationHourService {
 		Store store = storeRepository.findBySlug(slug).orElseThrow(() -> new BusinessException(
 			BusinessError.STORE_NOT_FOUND));
 		storeService.checkStoreChangePermit(store);
+		if (requestDto.getSundayStartTime().isAfter(requestDto.getSundayEndTime()) ||
+			requestDto.getMondayStartTime().isAfter(requestDto.getMondayEndTime()) ||
+			requestDto.getTuesdayStartTime().isAfter(requestDto.getTuesdayEndTime()) ||
+			requestDto.getWednesdayStartTime().isAfter(requestDto.getWednesdayEndTime()) ||
+			requestDto.getThursdayStartTime().isAfter(requestDto.getThursdayEndTime()) ||
+			requestDto.getFridayStartTime().isAfter(requestDto.getFridayEndTime()) ||
+			requestDto.getSaturdayStartTime().isAfter(requestDto.getSaturdayEndTime())
+		) {
+			throw new BusinessException(BusinessError.BAD_OPERATION_HOUR_REQUEST);
+		}
 		store.getStoreOperationHour().update(requestDto);
 	}
 }
