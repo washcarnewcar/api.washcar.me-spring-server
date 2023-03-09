@@ -27,6 +27,7 @@ public enum BusinessError {
 	STORE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "세차장 이미지를 찾을 수 없습니다."),
 	STORE_MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "세차장 메뉴를 찾을 수 없습니다."),
 	MEMBER_ROLE_NOT_MATCHED(HttpStatus.CONFLICT, "사용자의 정보가 변경되었습니다."),
+	BAD_OPERATION_HOUR_REQUEST(HttpStatus.CONFLICT, "세차장 운영 시작 시간은, 운영 종료 시간 이전이어야 합니다."),
 	;
 
 	private final HttpStatus httpStatus;
