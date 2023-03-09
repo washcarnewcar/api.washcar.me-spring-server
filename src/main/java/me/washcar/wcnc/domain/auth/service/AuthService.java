@@ -61,7 +61,7 @@ public class AuthService {
 		cookieService.authenticate(adapter.getUuid(), adapter.getMemberRole(), response);
 		Member member = memberRepository.findByUuid(adapter.getUuid())
 			.orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
-		return MemberMeDto.from(member, false);
+		return MemberMeDto.from(member);
 	}
 
 	@Transactional(readOnly = true)
@@ -150,8 +150,8 @@ public class AuthService {
 			.orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
 		// 전달받은 JWT속 ROLE과 DB속 ROLE이 다른 경우
 		if (!Objects.equals(authorizationHelper.getMyRole(), member.getMemberRole())) {
-			return MemberMeDto.from(member, true);
+			throw new BusinessException(BusinessError.MEMBER_ROLE_NOT_MATCHED);
 		}
-		return MemberMeDto.from(member, false);
+		return MemberMeDto.from(member);
 	}
 }

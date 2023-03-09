@@ -14,21 +14,17 @@ public class MemberMeDto {
 
 	private MemberRole memberRole;
 
-	private boolean isRefreshRequired;
-
 	@Builder
 	@SuppressWarnings("unused")
-	private MemberMeDto(String nickname, MemberRole memberRole, boolean isRefreshRequired) {
+	private MemberMeDto(String nickname, MemberRole memberRole) {
 		this.nickname = nickname;
 		this.memberRole = memberRole;
-		this.isRefreshRequired = isRefreshRequired;
 	}
 
-	public static MemberMeDto from(Member member, boolean isRefreshRequired) {
+	public static MemberMeDto from(Member member) {
 		return MemberMeDto.builder()
 			.nickname(member.getNickname())
 			.memberRole(member.getMemberRole())
-			.isRefreshRequired(isRefreshRequired)
 			.build();
 	}
 

@@ -62,8 +62,9 @@ public class SecurityConfiguration {
 
 			// AuthController
 			.requestMatchers("/v2/login", "/v2/logout", "/v2/members/login-id/*", "/v2/members/telephone/*",
-				"/v2/members/me", "/v2/signup", "/v2/pin", "/v2/telephone-login")
-			.permitAll()
+				"/v2/signup", "/v2/pin", "/v2/telephone-login").permitAll()
+
+			.requestMatchers("/v2/members/me").authenticated()
 
 			// OAuth2
 			.requestMatchers("/v2/oauth2/**")
@@ -135,7 +136,7 @@ public class SecurityConfiguration {
 
 			// SearchSlugController
 			.requestMatchers(HttpMethod.GET, "/v2/search/slugs/me")
-			.permitAll()
+			.authenticated()
 
 			// Any Request
 			.anyRequest()
