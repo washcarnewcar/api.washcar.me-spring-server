@@ -3,6 +3,7 @@ package me.washcar.wcnc.domain.auth.service;
 import static me.washcar.wcnc.domain.member.MemberRole.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Random;
 
 import org.slf4j.helpers.MessageFormatter;
@@ -31,6 +32,7 @@ import me.washcar.wcnc.global.error.ApplicationError;
 import me.washcar.wcnc.global.error.ApplicationException;
 import me.washcar.wcnc.global.error.BusinessError;
 import me.washcar.wcnc.global.error.BusinessException;
+import me.washcar.wcnc.global.utility.AuthorizationHelper;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +44,7 @@ public class AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final CookieService cookieService;
 	private final AligoService aligoService;
+	private final AuthorizationHelper authorizationHelper;
 
 	/**
 	 *	loginId 와 loginPassword 를 입력받아 인증 후 해당 id의 MemberMeDto 객체를 반환한다.
@@ -55,10 +58,10 @@ public class AuthService {
 			new UsernamePasswordAuthenticationToken(loginId, loginPassword));
 
 		AuthenticationAdapter adapter = (AuthenticationAdapter)authentication.getPrincipal();
-
 		cookieService.authenticate(adapter.getUuid(), adapter.getMemberRole(), response);
-
-		return this.getMemberMeByUuid(adapter.getUuid());
+		Member member = memberRepository.findByUuid(adapter.getUuid())
+			.orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
+		return MemberMeDto.from(member);
 	}
 
 	@Transactional(readOnly = true)
@@ -145,6 +148,10 @@ public class AuthService {
 	public MemberMeDto getMemberMeByUuid(String uuid) {
 		Member member = memberRepository.findByUuid(uuid)
 			.orElseThrow(() -> new BusinessException(BusinessError.MEMBER_NOT_FOUND));
-		return new MemberMeDto(member);
+		// 전달받은 JWT속 ROLE과 DB속 ROLE이 다른 경우
+		if (!Objects.equals(authorizationHelper.getMyRole(), member.getMemberRole())) {
+			throw new BusinessException(BusinessError.MEMBER_ROLE_NOT_MATCHED);
+		}
+		return MemberMeDto.from(member);
 	}
 }

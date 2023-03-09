@@ -74,10 +74,17 @@ public class AuthController {
 	}
 
 	@GetMapping("/members/me")
-	public ResponseEntity<MemberMeDto> getMemberByJwt(@AuthenticationPrincipal String uuid) {
-		return ResponseEntity
-			.status(HttpStatus.OK)
-			.body(authService.getMemberMeByUuid(uuid));
+	public ResponseEntity<MemberMeDto> getMemberByJwt(HttpServletResponse response,
+		@AuthenticationPrincipal String uuid) {
+		try {
+			MemberMeDto memberMeDto = authService.getMemberMeByUuid(uuid);
+			return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(memberMeDto);
+		} catch (BusinessException e) {
+			response.addCookie(cookieService.deleteAccessTokenCookie());
+			throw e;
+		}
 	}
 
 	@PostMapping("/pin")

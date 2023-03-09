@@ -9,7 +9,9 @@ import me.washcar.wcnc.domain.member.entity.Member;
 @Getter
 @NoArgsConstructor
 public class MemberMeDto {
+
 	private String nickname;
+
 	private MemberRole memberRole;
 
 	@Builder
@@ -19,9 +21,11 @@ public class MemberMeDto {
 		this.memberRole = memberRole;
 	}
 
-	public MemberMeDto(Member member) {
-		this.nickname = member.getNickname();
-		this.memberRole = member.getMemberRole();
+	public static MemberMeDto from(Member member) {
+		return MemberMeDto.builder()
+			.nickname(member.getNickname())
+			.memberRole(member.getMemberRole())
+			.build();
 	}
 
 }
