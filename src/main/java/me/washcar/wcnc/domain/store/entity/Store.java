@@ -13,7 +13,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -55,7 +54,8 @@ public class Store extends BaseEntity {
 	private Member owner;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private StoreOperationHour storeOperationHour;
+	@SuppressWarnings("FieldMayBeFinal")
+	private StoreOperationHour storeOperationHour = new StoreOperationHour();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")
 	private final List<StoreImage> storeImages = new ArrayList<>();
@@ -68,11 +68,6 @@ public class Store extends BaseEntity {
 
 	@OneToMany(mappedBy = "store")
 	private final List<Reservation> reservations = new ArrayList<>();
-
-	@PrePersist
-	private void onCreate() {
-		this.storeOperationHour = new StoreOperationHour();
-	}
 
 	@Builder
 	@SuppressWarnings("unused")
