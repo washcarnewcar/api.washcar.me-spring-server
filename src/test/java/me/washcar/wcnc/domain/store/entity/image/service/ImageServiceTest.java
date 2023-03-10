@@ -21,13 +21,13 @@ import me.washcar.wcnc.domain.store.StoreTestHelper;
 import me.washcar.wcnc.domain.store.dao.StoreRepository;
 import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.domain.store.entity.image.StoreImageTestHelper;
-import me.washcar.wcnc.domain.store.entity.image.dao.StoreImageRepository;
+import me.washcar.wcnc.domain.store.entity.image.dao.ImageRepository;
 import me.washcar.wcnc.domain.store.entity.image.dto.request.ImageRequestDto;
 import me.washcar.wcnc.domain.store.service.StoreService;
 import me.washcar.wcnc.global.error.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
-class StoreImageServiceTest {
+class ImageServiceTest {
 
 	@Mock
 	private StoreService storeService;
@@ -36,13 +36,13 @@ class StoreImageServiceTest {
 	private StoreRepository storeRepository;
 
 	@Mock
-	private StoreImageRepository storeImageRepository;
+	private ImageRepository imageRepository;
 
 	private static StoreTestHelper storeTestHelper;
 
 	private static StoreImageTestHelper storeImageTestHelper;
 
-	private static StoreImageService storeImageService;
+	private static ImageService imageService;
 
 	@BeforeAll
 	static void beforeAll() {
@@ -52,7 +52,7 @@ class StoreImageServiceTest {
 
 	@BeforeEach
 	void beforeEach() {
-		storeImageService = new StoreImageService(storeService, storeRepository, storeImageRepository,
+		imageService = new ImageService(storeService, storeRepository, imageRepository,
 			new ModelMapper());
 	}
 
@@ -68,7 +68,7 @@ class StoreImageServiceTest {
 			given(storeRepository.findBySlug(anyString())).willReturn(Optional.empty());
 
 			//when & then
-			assertThatThrownBy(() -> storeImageService.create("badStoreSlug", imageRequestDto.getImageUrl()))
+			assertThatThrownBy(() -> imageService.create("badStoreSlug", imageRequestDto.getImageUrl()))
 				.isInstanceOf(BusinessException.class);
 		}
 
@@ -82,9 +82,9 @@ class StoreImageServiceTest {
 
 			//when & then
 			for (int i = 0; i < 6; i++) {
-				storeImageService.create(store.getSlug(), imageRequestDto.getImageUrl());
+				imageService.create(store.getSlug(), imageRequestDto.getImageUrl());
 			}
-			assertThatThrownBy(() -> storeImageService.create(store.getSlug(), imageRequestDto.getImageUrl()))
+			assertThatThrownBy(() -> imageService.create(store.getSlug(), imageRequestDto.getImageUrl()))
 				.isInstanceOf(BusinessException.class);
 		}
 

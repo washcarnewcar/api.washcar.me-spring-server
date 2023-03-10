@@ -14,7 +14,7 @@ import me.washcar.wcnc.global.error.BusinessException;
 
 @Service
 @RequiredArgsConstructor
-public class StoreOperationHourService {
+public class OperationHourService {
 
 	private final StoreService storeService;
 
@@ -24,7 +24,7 @@ public class StoreOperationHourService {
 	public OperationHourDto getOperationHourBySlug(String slug) {
 		Store store = storeRepository.findBySlug(slug).orElseThrow(() -> new BusinessException(
 			BusinessError.STORE_NOT_FOUND));
-		return OperationHourDto.from(store.getStoreOperationHour());
+		return OperationHourDto.from(store.getOperationHour());
 	}
 
 	@Transactional
@@ -42,6 +42,6 @@ public class StoreOperationHourService {
 		) {
 			throw new BusinessException(BusinessError.BAD_OPERATION_HOUR_REQUEST);
 		}
-		store.getStoreOperationHour().update(requestDto);
+		store.getOperationHour().update(requestDto);
 	}
 }

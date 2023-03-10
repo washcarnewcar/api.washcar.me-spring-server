@@ -9,17 +9,17 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.store.dao.StoreRepository;
 import me.washcar.wcnc.domain.store.entity.Store;
-import me.washcar.wcnc.domain.store.entity.image.dao.StoreImageRepository;
+import me.washcar.wcnc.domain.store.entity.image.dao.ImageRepository;
 import me.washcar.wcnc.domain.store.entity.image.dto.response.ImageResponseDto;
 import me.washcar.wcnc.domain.store.entity.image.dto.response.ImagesDto;
-import me.washcar.wcnc.domain.store.entity.image.entity.StoreImage;
+import me.washcar.wcnc.domain.store.entity.image.entity.Image;
 import me.washcar.wcnc.domain.store.service.StoreService;
 import me.washcar.wcnc.global.error.BusinessError;
 import me.washcar.wcnc.global.error.BusinessException;
 
 @Service
 @RequiredArgsConstructor
-public class StoreImageService {
+public class ImageService {
 
 	public static final int MAX_IMAGE_NUMBER = 6;
 
@@ -27,7 +27,7 @@ public class StoreImageService {
 
 	private final StoreRepository storeRepository;
 
-	private final StoreImageRepository storeImageRepository;
+	private final ImageRepository imageRepository;
 
 	private final ModelMapper modelMapper;
 
@@ -36,10 +36,10 @@ public class StoreImageService {
 		Store store = storeRepository.findBySlug(slug).orElseThrow(() -> new BusinessException(
 			BusinessError.STORE_NOT_FOUND));
 		storeService.checkStoreChangePermit(store);
-		if (store.getStoreImages().size() >= MAX_IMAGE_NUMBER) {
+		if (store.getImages().size() >= MAX_IMAGE_NUMBER) {
 			throw new BusinessException(BusinessError.EXCEED_STORE_IMAGE_LIMIT);
 		}
-		StoreImage storeImage = StoreImage.builder()
+		Image storeImage = Image.builder()
 			.imageUrl(imageUrl)
 			.build();
 		store.addStoreImage(storeImage);
@@ -49,7 +49,7 @@ public class StoreImageService {
 	public ImagesDto getImagesBySlug(String slug) {
 		Store store = storeRepository.findBySlug(slug).orElseThrow(() -> new BusinessException(
 			BusinessError.STORE_NOT_FOUND));
-		List<StoreImage> storeImages = store.getStoreImages();
+		List<Image> storeImages = store.getImages();
 		List<ImageResponseDto> imageResponseDtos = storeImages.stream()
 			.map(m -> modelMapper.map(m, ImageResponseDto.class))
 			.toList();
@@ -58,14 +58,14 @@ public class StoreImageService {
 
 	@Transactional(readOnly = true)
 	public ImageResponseDto getImageByUuid(String uuid) {
-		StoreImage storeImage = storeImageRepository.findByUuid(uuid)
+		Image storeImage = imageRepository.findByUuid(uuid)
 			.orElseThrow(() -> new BusinessException(BusinessError.STORE_IMAGE_NOT_FOUND));
 		return modelMapper.map(storeImage, ImageResponseDto.class);
 	}
 
 	@Transactional
 	public void deleteImageByUuid(String uuid) {
-		StoreImage storeImage = storeImageRepository.findByUuid(uuid)
+		Image storeImage = imageRepository.findByUuid(uuid)
 			.orElseThrow(() -> new BusinessException(BusinessError.STORE_IMAGE_NOT_FOUND));
 		Store store = storeImage.getStore();
 		storeService.checkStoreChangePermit(store);

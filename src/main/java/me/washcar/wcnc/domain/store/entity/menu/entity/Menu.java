@@ -23,7 +23,7 @@ import me.washcar.wcnc.global.entity.UuidEntity;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(indexes = @Index(name = "uuid_store_menu_index", columnList = "uuid"))
-public class StoreMenu extends UuidEntity {
+public class Menu extends UuidEntity {
 
 	@Column(nullable = false)
 	private Integer price;
@@ -39,7 +39,7 @@ public class StoreMenu extends UuidEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Store store;
 
-	@OneToMany(mappedBy = "storeMenu")
+	@OneToMany(mappedBy = "menu")
 	private final Collection<Reservation> reservations = new ArrayList<>();
 
 	public void updateMenu(Integer price, Integer expectedMinute, String description, String image) {
@@ -51,7 +51,7 @@ public class StoreMenu extends UuidEntity {
 
 	@Builder
 	@SuppressWarnings("unused")
-	public StoreMenu(Integer price, Integer expectedMinute, String description, String image) {
+	public Menu(Integer price, Integer expectedMinute, String description, String image) {
 		this.price = price;
 		this.expectedMinute = expectedMinute;
 		this.description = description;

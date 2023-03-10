@@ -1,4 +1,4 @@
-package me.washcar.wcnc.domain.store.entity.menu.controller;
+package me.washcar.wcnc.domain.store.entity.operation.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,60 +14,60 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.domain.store.entity.menu.dto.request.MenuRequestDto;
-import me.washcar.wcnc.domain.store.entity.menu.dto.response.MenuResponseDto;
-import me.washcar.wcnc.domain.store.entity.menu.dto.response.MenusDto;
-import me.washcar.wcnc.domain.store.entity.menu.service.StoreMenuService;
+import me.washcar.wcnc.domain.store.entity.operation.dto.request.HolidayRequestDto;
+import me.washcar.wcnc.domain.store.entity.operation.dto.response.HolidayDto;
+import me.washcar.wcnc.domain.store.entity.operation.dto.response.HolidayListDto;
+import me.washcar.wcnc.domain.store.entity.operation.service.OperationHolidayService;
 import me.washcar.wcnc.global.definition.Regex;
 import me.washcar.wcnc.global.definition.RegexMessage;
 
 @RestController
 @RequestMapping("/v2")
 @RequiredArgsConstructor
-public class StoreMenuController {
+public class HolidayController {
 
-	private final StoreMenuService storeMenuService;
+	private final OperationHolidayService operationHolidayService;
 
-	@PostMapping("/store/{slug}/menu")
+	@PostMapping("/store/{slug}/holiday")
 	public ResponseEntity<Void> create(
 		@PathVariable @Pattern(regexp = Regex.SLUG, message = RegexMessage.SLUG) String slug,
-		@RequestBody @Valid MenuRequestDto requestDto) {
-		storeMenuService.create(slug, requestDto);
+		@RequestBody @Valid HolidayRequestDto requestDto) {
+		operationHolidayService.create(slug, requestDto);
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.build();
 	}
 
-	@GetMapping("/store/{slug}/menu")
-	public ResponseEntity<MenusDto> getMenusBySlug(
+	@GetMapping("/store/{slug}/holiday")
+	public ResponseEntity<HolidayListDto> getHolidaysBySlug(
 		@PathVariable @Pattern(regexp = Regex.SLUG, message = RegexMessage.SLUG) String slug) {
 		return ResponseEntity
 			.status(HttpStatus.OK)
-			.body(storeMenuService.getMenusBySlug(slug));
+			.body(operationHolidayService.getEveryHolidayBySlug(slug));
 	}
 
-	@GetMapping("/menu/{uuid}")
-	public ResponseEntity<MenuResponseDto> getMenuByUuid(
+	@GetMapping("/holiday/{uuid}")
+	public ResponseEntity<HolidayDto> getHolidayByUuid(
 		@PathVariable @Pattern(regexp = Regex.UUID_V4, message = RegexMessage.UUID_V4) String uuid) {
 		return ResponseEntity
 			.status(HttpStatus.OK)
-			.body(storeMenuService.getMenuByUuid(uuid));
+			.body(operationHolidayService.getHolidayByUuid(uuid));
 	}
 
-	@PutMapping("/menu/{uuid}")
-	public ResponseEntity<Void> putMenuByUuid(
+	@PutMapping("/holiday/{uuid}")
+	public ResponseEntity<Void> putHolidayByUuid(
 		@PathVariable @Pattern(regexp = Regex.UUID_V4, message = RegexMessage.UUID_V4) String uuid,
-		@RequestBody @Valid MenuRequestDto requestDto) {
-		storeMenuService.putMenuByUuid(uuid, requestDto);
+		@RequestBody @Valid HolidayRequestDto requestDto) {
+		operationHolidayService.putHolidayByUuid(uuid, requestDto);
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.build();
 	}
 
-	@DeleteMapping("/menu/{uuid}")
-	public ResponseEntity<Void> deleteMenuByUuid(
+	@DeleteMapping("/holiday/{uuid}")
+	public ResponseEntity<Void> deleteHolidayByUuid(
 		@PathVariable @Pattern(regexp = Regex.UUID_V4, message = RegexMessage.UUID_V4) String uuid) {
-		storeMenuService.deleteMenuByUuid(uuid);
+		operationHolidayService.deleteHolidayByUuid(uuid);
 		return ResponseEntity
 			.status(HttpStatus.NO_CONTENT)
 			.build();

@@ -5,11 +5,11 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class MenusDto {
+public class MenuListDto {
 
-	private final List<MenuResponseDto> menus;
+	private final List<MenuDto> menus;
 
-	public MenusDto(List<MenuResponseDto> menus) {
+	public MenuListDto(List<MenuDto> menus) {
 		this.menus = menus;
 	}
 

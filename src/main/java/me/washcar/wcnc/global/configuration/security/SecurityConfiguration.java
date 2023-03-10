@@ -105,7 +105,7 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.PATCH, "/v2/store/*")
 			.hasAnyAuthority(ROLE_ADMIN.name(), ROLE_SUPERMAN.name())
 
-			// StoreImageController
+			// Store.ImageController
 			.requestMatchers(HttpMethod.POST, "/v2/store/*/image")
 			.permitAll()
 
@@ -118,7 +118,7 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.DELETE, "/v2/image/*")
 			.permitAll()
 
-			// StoreMenuController
+			// Store.MenuController
 			.requestMatchers(HttpMethod.POST, "/v2/store/*/menu")
 			.permitAll()
 
@@ -134,14 +134,14 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.DELETE, "/v2/menu/*")
 			.permitAll()
 
-			// StoreOperationHourController
+			// Store.OperationHourController
 			.requestMatchers(HttpMethod.GET, "/v2/store/*/time")
 			.permitAll()
 
 			.requestMatchers(HttpMethod.PUT, "/v2/store/*/time")
 			.permitAll()
 
-			// StoreOperationHolidayController
+			// Store.HolidayController
 			.requestMatchers(HttpMethod.POST, "/v2/store/*/holiday")
 			.permitAll()
 

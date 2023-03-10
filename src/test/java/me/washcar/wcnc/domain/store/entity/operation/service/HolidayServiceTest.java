@@ -20,13 +20,13 @@ import me.washcar.wcnc.domain.store.StoreTestHelper;
 import me.washcar.wcnc.domain.store.dao.StoreRepository;
 import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.domain.store.entity.operation.StoreOperationHolidayTestHelper;
-import me.washcar.wcnc.domain.store.entity.operation.dao.StoreOperationHolidayRepository;
+import me.washcar.wcnc.domain.store.entity.operation.dao.OperationHolidayRepository;
 import me.washcar.wcnc.domain.store.entity.operation.dto.request.HolidayRequestDto;
 import me.washcar.wcnc.domain.store.service.StoreService;
 import me.washcar.wcnc.global.error.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
-class StoreOperationHolidayServiceTest {
+class HolidayServiceTest {
 
 	@Mock
 	private StoreService storeService;
@@ -35,13 +35,13 @@ class StoreOperationHolidayServiceTest {
 	private StoreRepository storeRepository;
 
 	@Mock
-	private StoreOperationHolidayRepository storeOperationHolidayRepository;
+	private OperationHolidayRepository operationHolidayRepository;
 
 	private static StoreOperationHolidayTestHelper storeOperationHolidayTestHelper;
 
 	private static StoreTestHelper storeTestHelper;
 
-	private StoreOperationHolidayService storeOperationHolidayService;
+	private OperationHolidayService operationHolidayService;
 
 	@BeforeAll
 	static void beforeAll() {
@@ -51,8 +51,8 @@ class StoreOperationHolidayServiceTest {
 
 	@BeforeEach
 	void beforeEach() {
-		storeOperationHolidayService = new StoreOperationHolidayService(storeService,
-			storeRepository, storeOperationHolidayRepository, new ModelMapper());
+		operationHolidayService = new OperationHolidayService(storeService,
+			storeRepository, operationHolidayRepository, new ModelMapper());
 	}
 
 	@Nested
@@ -68,7 +68,7 @@ class StoreOperationHolidayServiceTest {
 			given(storeRepository.findBySlug(anyString())).willReturn(Optional.of(store));
 
 			//when & then
-			assertThatThrownBy(() -> storeOperationHolidayService.create("goodSlug", requestDto)).isInstanceOf(
+			assertThatThrownBy(() -> operationHolidayService.create("goodSlug", requestDto)).isInstanceOf(
 				BusinessException.class);
 		}
 
