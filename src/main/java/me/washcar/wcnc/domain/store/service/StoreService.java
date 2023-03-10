@@ -32,15 +32,16 @@ public class StoreService {
 
 	private final ModelMapper modelMapper;
 
-	private void checkNewSlugSafety(StoreRequestDto storeRequestDto) {
-		if (storeRepository.existsBySlug(storeRequestDto.getSlug())) {
+	@Transactional(readOnly = true)
+	public void checkNewSlugSafety(String slug) {
+		if (storeRepository.existsBySlug(slug)) {
 			throw new BusinessException(BusinessError.STORE_ALREADY_EXIST);
 		}
 	}
 
-	private void checkChangeSlugSafety(String slug, StoreRequestDto storeRequestDto) {
+	public void checkChangeSlugSafety(String slug, StoreRequestDto storeRequestDto) {
 		if (!storeRequestDto.getSlug().equals(slug)) {
-			checkNewSlugSafety(storeRequestDto);
+			checkNewSlugSafety(storeRequestDto.getSlug());
 		}
 	}
 
@@ -60,7 +61,7 @@ public class StoreService {
 
 	@Transactional
 	public void postStore(StoreRequestDto storeRequestDto, String ownerUuid) {
-		checkNewSlugSafety(storeRequestDto);
+		checkNewSlugSafety(storeRequestDto.getSlug());
 		Store store = Store.builder()
 			.slug(storeRequestDto.getSlug())
 			.location(storeRequestDto.getLocation())
