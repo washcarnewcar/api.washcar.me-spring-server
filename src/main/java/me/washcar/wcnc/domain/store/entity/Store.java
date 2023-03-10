@@ -99,6 +99,15 @@ public class Store extends BaseEntity {
 		this.storeMenus.remove(storeMenu);
 	}
 
+	public void addStoreHoliday(StoreOperationHoliday storeOperationHoliday) {
+		this.storeOperationHolidays.add(storeOperationHoliday);
+		storeOperationHoliday.setStore(this);
+	}
+
+	public void deleteStoreHoliday(StoreOperationHoliday storeOperationHoliday) {
+		this.storeOperationHolidays.remove(storeOperationHoliday);
+	}
+
 	public void assignOwner(Member owner) {
 		this.owner = owner;
 		owner.getStores().add(this);

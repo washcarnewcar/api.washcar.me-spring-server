@@ -134,6 +134,29 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.DELETE, "/v2/menu/*")
 			.permitAll()
 
+			// StoreOperationHourController
+			.requestMatchers(HttpMethod.GET, "/v2/store/*/time")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.PUT, "/v2/store/*/time")
+			.permitAll()
+
+			// StoreOperationHolidayController
+			.requestMatchers(HttpMethod.POST, "/v2/store/*/holiday")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.GET, "/v2/store/*/holiday")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.GET, "/v2/holiday/*")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.PUT, "/v2/holiday/*")
+			.permitAll()
+
+			.requestMatchers(HttpMethod.DELETE, "/v2/holiday/*")
+			.permitAll()
+
 			// SearchSlugController
 			.requestMatchers(HttpMethod.GET, "/v2/search/slugs/me")
 			.authenticated()
