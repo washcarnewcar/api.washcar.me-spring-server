@@ -28,6 +28,8 @@ public enum BusinessError {
 	STORE_MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "세차장 메뉴를 찾을 수 없습니다."),
 	MEMBER_ROLE_NOT_MATCHED(HttpStatus.CONFLICT, "사용자의 정보가 변경되었습니다."),
 	BAD_OPERATION_HOUR_REQUEST(HttpStatus.CONFLICT, "세차장 운영 시작 시간은, 운영 종료 시간 이전이어야 합니다."),
+	BAD_OPERATION_HOLIDAY_REQUEST(HttpStatus.CONFLICT, "세차장 휴일 시작 시간은, 휴일 종료 시간 이전이어야 합니다."),
+	STORE_HOLIDAY_NOT_FOUND(HttpStatus.NOT_FOUND, "세차장 휴일을 찾을 수 없습니다."),
 	;
 
 	private final HttpStatus httpStatus;

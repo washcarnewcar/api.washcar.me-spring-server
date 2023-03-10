@@ -1,4 +1,6 @@
-package me.washcar.wcnc.domain.store.entity.image.entity;
+package me.washcar.wcnc.domain.store.entity.operation.entity;
+
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,11 +19,14 @@ import me.washcar.wcnc.global.entity.UuidEntity;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = @Index(name = "uuid_store_image_index", columnList = "uuid"))
-public class StoreImage extends UuidEntity {
+@Table(indexes = @Index(name = "uuid_store_operation_exception_index", columnList = "uuid"))
+public class Holiday extends UuidEntity {
 
 	@Column(nullable = false)
-	private String imageUrl;
+	private LocalDateTime startDateTime;
+
+	@Column(nullable = false)
+	private LocalDateTime endDateTime;
 
 	@Setter
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -29,8 +34,13 @@ public class StoreImage extends UuidEntity {
 
 	@Builder
 	@SuppressWarnings("unused")
-	private StoreImage(String imageUrl, Store store) {
-		this.imageUrl = imageUrl;
+	private Holiday(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		this.startDateTime = startDateTime;
+		this.endDateTime = endDateTime;
 	}
 
+	public void update(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		this.startDateTime = startDateTime;
+		this.endDateTime = endDateTime;
+	}
 }

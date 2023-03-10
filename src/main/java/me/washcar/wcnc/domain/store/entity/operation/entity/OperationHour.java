@@ -13,7 +13,7 @@ import me.washcar.wcnc.global.entity.BaseEntity;
 
 @Entity
 @Getter
-public class StoreOperationHour extends BaseEntity {
+public class OperationHour extends BaseEntity {
 
 	@Column(nullable = false)
 	private LocalTime sundayStartTime;
@@ -57,10 +57,10 @@ public class StoreOperationHour extends BaseEntity {
 	@Column(nullable = false)
 	private LocalTime saturdayEndTime;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "storeOperationHour")
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "operationHour")
 	private Store store;
 
-	public StoreOperationHour() {
+	public OperationHour() {
 		LocalTime defaultBeginningTime = LocalTime.of(9, 0, 0);
 		LocalTime defaultEndTime = LocalTime.of(18, 0, 0);
 

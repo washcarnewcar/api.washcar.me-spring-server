@@ -14,30 +14,30 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.domain.store.entity.operation.dto.request.OperationHourRequestDto;
 import me.washcar.wcnc.domain.store.entity.operation.dto.response.OperationHourDto;
-import me.washcar.wcnc.domain.store.entity.operation.service.StoreOperationHourService;
+import me.washcar.wcnc.domain.store.entity.operation.service.OperationHourService;
 import me.washcar.wcnc.global.definition.Regex;
 import me.washcar.wcnc.global.definition.RegexMessage;
 
 @RestController
 @RequestMapping("/v2")
 @RequiredArgsConstructor
-public class StoreOperationHourController {
+public class OperationHourController {
 
-	private final StoreOperationHourService storeOperationHourService;
+	private final OperationHourService operationHourService;
 
 	@GetMapping("/store/{slug}/time")
 	public ResponseEntity<OperationHourDto> getOperationHourBySlug(
 		@PathVariable @Pattern(regexp = Regex.SLUG, message = RegexMessage.SLUG) String slug) {
 		return ResponseEntity
 			.status(HttpStatus.OK)
-			.body(storeOperationHourService.getOperationHourBySlug(slug));
+			.body(operationHourService.getOperationHourBySlug(slug));
 	}
 
 	@PutMapping("/store/{slug}/time")
 	public ResponseEntity<Void> putOperationHourBySlug(
 		@PathVariable @Pattern(regexp = Regex.SLUG, message = RegexMessage.SLUG) String slug,
 		@RequestBody @Valid OperationHourRequestDto requestDto) {
-		storeOperationHourService.putOperationHourBySlug(slug, requestDto);
+		operationHourService.putOperationHourBySlug(slug, requestDto);
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.build();

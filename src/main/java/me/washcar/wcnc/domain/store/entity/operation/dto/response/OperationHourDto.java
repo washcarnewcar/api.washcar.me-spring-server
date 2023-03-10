@@ -4,7 +4,7 @@ import java.time.LocalTime;
 
 import lombok.Builder;
 import lombok.Getter;
-import me.washcar.wcnc.domain.store.entity.operation.entity.StoreOperationHour;
+import me.washcar.wcnc.domain.store.entity.operation.entity.OperationHour;
 
 @Getter
 public class OperationHourDto {
@@ -61,22 +61,22 @@ public class OperationHourDto {
 
 	}
 
-	public static OperationHourDto from(StoreOperationHour storeOperationHour) {
+	public static OperationHourDto from(OperationHour operationHour) {
 		return OperationHourDto.builder()
-			.sundayStartTime(storeOperationHour.getSundayStartTime())
-			.sundayEndTime(storeOperationHour.getSundayEndTime())
-			.mondayStartTime(storeOperationHour.getMondayStartTime())
-			.mondayEndTime(storeOperationHour.getMondayEndTime())
-			.tuesdayStartTime(storeOperationHour.getTuesdayStartTime())
-			.tuesdayEndTime(storeOperationHour.getTuesdayEndTime())
-			.wednesdayStartTime(storeOperationHour.getWednesdayStartTime())
-			.wednesdayEndTime(storeOperationHour.getWednesdayEndTime())
-			.thursdayStartTime(storeOperationHour.getThursdayStartTime())
-			.thursdayEndTime(storeOperationHour.getThursdayEndTime())
-			.fridayStartTime(storeOperationHour.getFridayStartTime())
-			.fridayEndTime(storeOperationHour.getFridayEndTime())
-			.saturdayStartTime(storeOperationHour.getSaturdayStartTime())
-			.saturdayEndTime(storeOperationHour.getSaturdayEndTime())
+			.sundayStartTime(operationHour.getSundayStartTime())
+			.sundayEndTime(operationHour.getSundayEndTime())
+			.mondayStartTime(operationHour.getMondayStartTime())
+			.mondayEndTime(operationHour.getMondayEndTime())
+			.tuesdayStartTime(operationHour.getTuesdayStartTime())
+			.tuesdayEndTime(operationHour.getTuesdayEndTime())
+			.wednesdayStartTime(operationHour.getWednesdayStartTime())
+			.wednesdayEndTime(operationHour.getWednesdayEndTime())
+			.thursdayStartTime(operationHour.getThursdayStartTime())
+			.thursdayEndTime(operationHour.getThursdayEndTime())
+			.fridayStartTime(operationHour.getFridayStartTime())
+			.fridayEndTime(operationHour.getFridayEndTime())
+			.saturdayStartTime(operationHour.getSaturdayStartTime())
+			.saturdayEndTime(operationHour.getSaturdayEndTime())
 			.build();
 	}
 

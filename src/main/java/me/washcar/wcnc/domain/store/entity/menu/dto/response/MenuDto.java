@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class MenuResponseDto {
+public class MenuDto {
 
 	private Integer price;
 

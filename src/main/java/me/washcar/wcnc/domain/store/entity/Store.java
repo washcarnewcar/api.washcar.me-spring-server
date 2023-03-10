@@ -21,10 +21,10 @@ import lombok.NoArgsConstructor;
 import me.washcar.wcnc.domain.member.entity.Member;
 import me.washcar.wcnc.domain.reservation.entity.Reservation;
 import me.washcar.wcnc.domain.store.StoreStatus;
-import me.washcar.wcnc.domain.store.entity.image.entity.StoreImage;
-import me.washcar.wcnc.domain.store.entity.menu.entity.StoreMenu;
-import me.washcar.wcnc.domain.store.entity.operation.entity.StoreOperationHoliday;
-import me.washcar.wcnc.domain.store.entity.operation.entity.StoreOperationHour;
+import me.washcar.wcnc.domain.store.entity.image.entity.Image;
+import me.washcar.wcnc.domain.store.entity.menu.entity.Menu;
+import me.washcar.wcnc.domain.store.entity.operation.entity.Holiday;
+import me.washcar.wcnc.domain.store.entity.operation.entity.OperationHour;
 import me.washcar.wcnc.global.entity.BaseEntity;
 
 @Entity
@@ -55,16 +55,16 @@ public class Store extends BaseEntity {
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@SuppressWarnings("FieldMayBeFinal")
-	private StoreOperationHour storeOperationHour = new StoreOperationHour();
+	private OperationHour operationHour = new OperationHour();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")
-	private final List<StoreImage> storeImages = new ArrayList<>();
+	private final List<Image> images = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")
-	private final List<StoreMenu> storeMenus = new ArrayList<>();
+	private final List<Menu> menus = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")
-	private final List<StoreOperationHoliday> storeOperationHolidays = new ArrayList<>();
+	private final List<Holiday> holidays = new ArrayList<>();
 
 	@OneToMany(mappedBy = "store")
 	private final List<Reservation> reservations = new ArrayList<>();
@@ -81,22 +81,31 @@ public class Store extends BaseEntity {
 		return Objects.equals(uuid, this.getOwner().getUuid());
 	}
 
-	public void addStoreImage(StoreImage storeImage) {
-		this.storeImages.add(storeImage);
+	public void addStoreImage(Image storeImage) {
+		this.images.add(storeImage);
 		storeImage.setStore(this);
 	}
 
-	public void deleteStoreImage(StoreImage storeImage) {
-		this.storeImages.remove(storeImage);
+	public void deleteStoreImage(Image storeImage) {
+		this.images.remove(storeImage);
 	}
 
-	public void addStoreMenu(StoreMenu storeMenu) {
-		this.storeMenus.add(storeMenu);
-		storeMenu.setStore(this);
+	public void addStoreMenu(Menu menu) {
+		this.menus.add(menu);
+		menu.setStore(this);
 	}
 
-	public void deleteStoreMenu(StoreMenu storeMenu) {
-		this.storeMenus.remove(storeMenu);
+	public void deleteStoreMenu(Menu menu) {
+		this.menus.remove(menu);
+	}
+
+	public void addStoreHoliday(Holiday holiday) {
+		this.holidays.add(holiday);
+		holiday.setStore(this);
+	}
+
+	public void deleteStoreHoliday(Holiday holiday) {
+		this.holidays.remove(holiday);
 	}
 
 	public void assignOwner(Member owner) {

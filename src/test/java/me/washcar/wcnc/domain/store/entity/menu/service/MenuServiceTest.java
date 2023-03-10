@@ -21,13 +21,13 @@ import me.washcar.wcnc.domain.store.StoreTestHelper;
 import me.washcar.wcnc.domain.store.dao.StoreRepository;
 import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.domain.store.entity.menu.StoreMenuTestHelper;
-import me.washcar.wcnc.domain.store.entity.menu.dao.StoreMenuRepository;
+import me.washcar.wcnc.domain.store.entity.menu.dao.MenuRepository;
 import me.washcar.wcnc.domain.store.entity.menu.dto.request.MenuRequestDto;
 import me.washcar.wcnc.domain.store.service.StoreService;
 import me.washcar.wcnc.global.error.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
-class StoreMenuServiceTest {
+class MenuServiceTest {
 
 	@Mock
 	private StoreService storeService;
@@ -36,13 +36,13 @@ class StoreMenuServiceTest {
 	private StoreRepository storeRepository;
 
 	@Mock
-	private StoreMenuRepository storeMenuRepository;
+	private MenuRepository menuRepository;
 
 	private static StoreTestHelper storeTestHelper;
 
 	private static StoreMenuTestHelper storeMenuTestHelper;
 
-	private StoreMenuService storeMenuService;
+	private MenuService menuService;
 
 	@BeforeAll
 	static void beforeAll() {
@@ -52,7 +52,7 @@ class StoreMenuServiceTest {
 
 	@BeforeEach
 	void beforeEach() {
-		storeMenuService = new StoreMenuService(storeService, storeRepository, storeMenuRepository,
+		menuService = new MenuService(storeService, storeRepository, menuRepository,
 			new ModelMapper());
 	}
 
@@ -68,7 +68,7 @@ class StoreMenuServiceTest {
 			given(storeRepository.findBySlug(anyString())).willReturn(Optional.empty());
 
 			//when & then
-			assertThatThrownBy(() -> storeMenuService.create("badStoreSlug", menuRequestDto))
+			assertThatThrownBy(() -> menuService.create("badStoreSlug", menuRequestDto))
 				.isInstanceOf(BusinessException.class);
 		}
 
@@ -82,9 +82,9 @@ class StoreMenuServiceTest {
 
 			//when & then
 			for (int i = 0; i < 64; i++) {
-				storeMenuService.create("goodStoreSlug", menuRequestDto);
+				menuService.create("goodStoreSlug", menuRequestDto);
 			}
-			assertThatThrownBy(() -> storeMenuService.create("goodStoreSlug", menuRequestDto))
+			assertThatThrownBy(() -> menuService.create("goodStoreSlug", menuRequestDto))
 				.isInstanceOf(BusinessException.class);
 		}
 

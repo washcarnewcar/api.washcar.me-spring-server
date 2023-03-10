@@ -22,12 +22,12 @@ import me.washcar.wcnc.domain.store.entity.Store;
 import me.washcar.wcnc.domain.store.entity.operation.StoreOperationHourTestHelper;
 import me.washcar.wcnc.domain.store.entity.operation.dto.request.OperationHourRequestDto;
 import me.washcar.wcnc.domain.store.entity.operation.dto.response.OperationHourDto;
-import me.washcar.wcnc.domain.store.entity.operation.entity.StoreOperationHour;
+import me.washcar.wcnc.domain.store.entity.operation.entity.OperationHour;
 import me.washcar.wcnc.domain.store.service.StoreService;
 import me.washcar.wcnc.global.error.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
-class StoreOperationHourServiceTest {
+class OperationHourServiceTest {
 
 	@Mock
 	private StoreService storeService;
@@ -39,7 +39,7 @@ class StoreOperationHourServiceTest {
 
 	private static StoreTestHelper storeTestHelper;
 
-	private StoreOperationHourService storeOperationHourService;
+	private OperationHourService operationHourService;
 
 	@BeforeAll
 	static void beforeAll() {
@@ -49,7 +49,7 @@ class StoreOperationHourServiceTest {
 
 	@BeforeEach
 	void beforeEach() {
-		storeOperationHourService = new StoreOperationHourService(storeService, storeRepository);
+		operationHourService = new OperationHourService(storeService, storeRepository);
 	}
 
 	@Nested
@@ -64,7 +64,7 @@ class StoreOperationHourServiceTest {
 			given(storeRepository.findBySlug(anyString())).willReturn(Optional.of(store));
 
 			//when
-			OperationHourDto operationHourDto = storeOperationHourService.getOperationHourBySlug("goodSlug");
+			OperationHourDto operationHourDto = operationHourService.getOperationHourBySlug("goodSlug");
 
 			//then
 			LocalTime defaultBeginningTime = LocalTime.of(9, 0, 0);
@@ -102,10 +102,10 @@ class StoreOperationHourServiceTest {
 			given(storeRepository.findBySlug(anyString())).willReturn(Optional.of(store));
 
 			//when
-			storeOperationHourService.putOperationHourBySlug("goodSlug", requestDto);
+			operationHourService.putOperationHourBySlug("goodSlug", requestDto);
 
 			//then
-			StoreOperationHour operationHour = store.getStoreOperationHour();
+			OperationHour operationHour = store.getOperationHour();
 			assertThat(operationHour.getSundayStartTime()).isEqualTo(requestDto.getSundayStartTime());
 			assertThat(operationHour.getMondayStartTime()).isEqualTo(requestDto.getMondayStartTime());
 			assertThat(operationHour.getTuesdayStartTime()).isEqualTo(requestDto.getTuesdayStartTime());
@@ -134,10 +134,10 @@ class StoreOperationHourServiceTest {
 
 			//when & then
 			assertThatThrownBy(
-				() -> storeOperationHourService.putOperationHourBySlug("goodSlug", requestDto)).isInstanceOf(
+				() -> operationHourService.putOperationHourBySlug("goodSlug", requestDto)).isInstanceOf(
 				BusinessException.class);
 
-			StoreOperationHour operationHour = store.getStoreOperationHour();
+			OperationHour operationHour = store.getOperationHour();
 			assertThat(operationHour.getSundayStartTime()).isNotEqualTo(requestDto.getSundayStartTime());
 			assertThat(operationHour.getMondayStartTime()).isNotEqualTo(requestDto.getMondayStartTime());
 			assertThat(operationHour.getTuesdayStartTime()).isNotEqualTo(requestDto.getTuesdayStartTime());
@@ -165,10 +165,10 @@ class StoreOperationHourServiceTest {
 
 			//when & then
 			assertThatThrownBy(
-				() -> storeOperationHourService.putOperationHourBySlug("goodSlug", requestDto)).isInstanceOf(
+				() -> operationHourService.putOperationHourBySlug("goodSlug", requestDto)).isInstanceOf(
 				BusinessException.class);
 
-			StoreOperationHour operationHour = store.getStoreOperationHour();
+			OperationHour operationHour = store.getOperationHour();
 			LocalTime defaultBeginningTime = LocalTime.of(9, 0, 0);
 			LocalTime defaultEndTime = LocalTime.of(18, 0, 0);
 
